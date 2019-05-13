@@ -10,8 +10,12 @@ Imports OpenTK.Input
 
 Module Module1
 
+    Private Declare Function GetTickCount& Lib "kernel32" ()
+
     Public Sub Main()
-        Dim app As New GLTexturedCube
+        'Dim app As New GLTexturedCube
+        'app.Run(60, 60)
+        Dim app As New shader_test
         app.Run(60, 60)
     End Sub
 
@@ -30,7 +34,8 @@ Module Module1
         'End Sub
 
         Protected Sub LoadTexture(ByVal textureId As Integer, ByVal filename As String)
-            Dim bmp As New Bitmap(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\..\..\" + filename)
+            'Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + 
+            Dim bmp As New Bitmap("textures/" + filename)
 
             Dim data As BitmapData = bmp.LockBits(New Rectangle(0, 0, bmp.Width, bmp.Height),
                                                 System.Drawing.Imaging.ImageLockMode.ReadOnly,
@@ -54,6 +59,12 @@ Module Module1
             LoadTexture(textures(2), "gilmie.jpg")
             LoadTexture(textures(3), "goldfish_car.jpg")
             LoadTexture(textures(4), "icon.png")
+            LoadTexture(textures(5), "lunx.png")
+            LoadTexture(textures(6), "http___i.huffpost.com_gen_5334752_images_n-GIANT-DUCK-628x314.jpg")
+            LoadTexture(textures(7), "Tux_Mono.svg.png")
+            LoadTexture(textures(8), "download.jpg")
+            LoadTexture(textures(9), "l3lmzb0a2xw21.jpg")
+            LoadTexture(textures(10), "ab4pjx3bnww21.jpg")
         End Sub
 
         Protected Overrides Sub OnLoad(ByVal e As System.EventArgs)
@@ -63,12 +74,29 @@ Module Module1
             GL.Enable(EnableCap.Texture2D)
             GL.Enable(EnableCap.Blend)
             GL.Enable(EnableCap.Multisample)
+            'GL.Enable(EnableCap.CullFace)
+            'GL.CullFace(CullFaceMode.Front)
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)
+
+            polys.loadPolys()
 
             camera.ShowWindow(camera.GetConsoleWindow(), camera.SW_HIDE)
             camera.load()
 
             LoadTextures()
+
+            entites.Add(New entity(textures(0), 0, 0, 5))
+            entites.Add(New entity(textures(1), 0, 5, 0))
+            entites.Add(New entity(textures(2), 0, 0, 0))
+            entites.Add(New entity(textures(3), 0, 0, -5))
+            entites.Add(New entity(textures(4), 5, 5, 0))
+            entites.Add(New entity(textures(5), 5, 5, 0))
+            entites.Add(New entity(textures(6), 5, 5, -5))
+            entites.Add(New entity(textures(7), 5, 0, 0))
+            entites.Add(New entity(textures(8), 5, -5, 0))
+            entites.Add(New entity(textures(9), -5, -5, 5))
+            entites.Add(New entity(textures(10), 5, -5, 5))
+
         End Sub
 
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
@@ -90,8 +118,13 @@ Module Module1
         Public Shared pitch As Double = 0
         Public Shared yaw As Double = 0
 
+        Public Shared entites As List(Of entity) = New List(Of entity)
+
+        Dim start As Long
+
         Protected Overrides Sub OnRenderFrame(ByVal e As OpenTK.FrameEventArgs)
             MyBase.OnRenderFrame(e)
+            start = GetTickCount()
             GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
             GL.LoadIdentity()
@@ -113,33 +146,20 @@ Module Module1
             GL.Rotate(-yaw, 0, 1, 0)
 
             camera.update()
-            'GL.Translate(0, 0, 0)
 
             angle += 1.5
 
+            'GL.Enable(EnableCap.CullFace)
+            artist.drawTriangle(textures(7), -5, 0, 5)
 
-            'bindRotation()
-            artist.drawCube(textures(0), 0, 0, 5)
-            'unbindRotation()
-
-
-
-            'bindRotation()
-            artist.drawCube(textures(1), 0, 5, 0)
-            'unbindRotation()
-
-
-
-            'bindRotation()
-            artist.drawCube(textures(2), 0, 0, 0)
-            'unbindRotation()
-
-
-            artist.drawCube(textures(3), 0, 0, -5)
-
-            artist.drawCube(textures(4), 5, 0, -5)
+            'GL.Disable(EnableCap.CullFace)
+            For Each d As entity In entites
+                d.update()
+                d.draw()
+            Next
 
             SwapBuffers()
+            'Console.WriteLine(GetTickCount() - start)
         End Sub
 
         Public Sub bindRotation()

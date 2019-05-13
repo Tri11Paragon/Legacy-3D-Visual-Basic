@@ -2,6 +2,9 @@
 Imports OpenTK.Input
 Imports OpenTK.Graphics
 Imports OpenTK.Graphics.OpenGL
+Imports System
+Imports System.Configuration
+Imports System.Data
 
 Public Class camera
 
@@ -14,7 +17,7 @@ Public Class camera
     Public Shared keysDown(230) As Boolean
     Public Shared dVr(5) As Int16 ' stores data of boolean varabiles in a int16
 
-    Shared x, y, z As Double
+    Public Shared x, y, z As Double
     Shared moveAtX, moveAtY As Double
     Shared speed As Double = 0.2
     Public Shared enableVirtical As Boolean = False
@@ -46,6 +49,10 @@ Public Class camera
         End If
         If dVr(1) And dVr(0) Then
             'Console.WriteLine(e.ScanCode)
+        End If
+        If e.ScanCode = Key.Escape Then
+            Console.WriteLine("Exiting Program!")
+            Process.GetCurrentProcess().CloseMainWindow()
         End If
     End Sub
 
@@ -79,6 +86,10 @@ Public Class camera
         End If
         If keysDown(Key.Space) Then
             y -= speed
+        End If
+
+        If keysDown(Key.T) Then
+            Module1.GLTexturedCube.entites(1).accelerate(0, 0.01, 0)
         End If
 
         'Console.WriteLine(CType(moveAtX, String) + " : " + CType(moveAtY, String))

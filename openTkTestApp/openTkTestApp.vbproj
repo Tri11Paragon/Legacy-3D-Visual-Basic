@@ -76,6 +76,8 @@
   <ItemGroup>
     <Compile Include="artist.vb" />
     <Compile Include="camera.vb" />
+    <Compile Include="entity.vb" />
+    <Compile Include="maths.vb" />
     <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -92,6 +94,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="polys.vb" />
+    <Compile Include="shader_test.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
