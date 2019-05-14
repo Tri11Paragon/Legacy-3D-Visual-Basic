@@ -1,16 +1,25 @@
-#version 330 core
+#version 400 core
 
-layout (location = 0) in vec3 Position;
-layout (location = 1) in vec3 Color;
+in vec3 position;
+in vec2 textureCoordinates;
+in vec3 normal;
 
-out VS_OUTPUT {
-    vec3 Color;
-} OUT;
+out vec2 pass_textureCoordinates;
+out vec3 surfaceNormal;
+out vec3 toCameraVector;
 
-uniform float time;
+uniform mat4 transformationMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
 
-void main()
-{
-    gl_Position = vec4(vec3(Position.x + time, Position.y + time, Position.z), 1.0);
-    OUT.Color = Color;
+void main(void){
+
+	vec4 worldPosition = transformationMatrix * vec4(position,1.0);
+	gl_Position = projectionMatrix * viewMatrix * worldPosition;
+	pass_textureCoordinates = textureCoordinates;
+	
+	surfaceNormal = (transformationMatrix * vec4(normal,0.0)).xyz;
+	toCameraVector = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
+	
+	
 }

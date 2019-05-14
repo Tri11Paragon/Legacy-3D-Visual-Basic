@@ -6,7 +6,7 @@ Imports System
 Imports System.Configuration
 Imports System.Data
 
-Public Class camera
+Public Class o_camera
 
     Public Declare Auto Function ShowWindow Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal nCmdShow As Integer) As Boolean
     Public Declare Auto Function GetConsoleWindow Lib "kernel32.dll" () As IntPtr
@@ -38,7 +38,7 @@ Public Class camera
             Else
                 dVr(0) = 0
             End If
-            camera.ShowWindow(camera.GetConsoleWindow(), dVr(0))
+            o_camera.ShowWindow(o_camera.GetConsoleWindow(), dVr(0))
         End If
         If e.ScanCode = 19 Then
             If dVr(1) = 0 Then
@@ -89,17 +89,17 @@ Public Class camera
         End If
 
         If keysDown(Key.T) Then
-            Module1.GLTexturedCube.entites(1).accelerate(0, 0.01, 0)
+            o_Module1.GLTexturedCube.entites(1).accelerate(0, 0.01, 0)
         End If
 
         'Console.WriteLine(CType(moveAtX, String) + " : " + CType(moveAtY, String))
 
-        Dim dx As Double = -(moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * Math.Cos(rai(Module1.GLTexturedCube.yaw)))
+        Dim dx As Double = -(moveAtX * -Math.Sin(rai(o_Module1.GLTexturedCube.yaw))) + (moveAtY * Math.Cos(rai(o_Module1.GLTexturedCube.yaw)))
         If enableVirtical Then
-            Dim dy As Double = (moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.pitch)))
+            Dim dy As Double = (moveAtX * -Math.Sin(rai(o_Module1.GLTexturedCube.pitch)))
             y += dy
         End If
-        Dim dz As Double = (moveAtX * Math.Cos(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * -Math.Sin(rai(Module1.GLTexturedCube.yaw)))
+        Dim dz As Double = (moveAtX * Math.Cos(rai(o_Module1.GLTexturedCube.yaw))) + (moveAtY * -Math.Sin(rai(o_Module1.GLTexturedCube.yaw)))
 
         x += dx
         z += dz

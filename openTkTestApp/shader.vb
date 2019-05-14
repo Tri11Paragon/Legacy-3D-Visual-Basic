@@ -63,7 +63,6 @@ Public Class shader_test
         MyBase.OnLoad(e)
         GL.ClearColor(0.5, 0.5, 0.6, 0)
 
-        polys.loadPolys()
 
         'camera.ShowWindow(camera.GetConsoleWindow(), camera.SW_HIDE)
         'camera.load()
@@ -111,28 +110,13 @@ Public Class shader_test
         'GL.LoadIdentity()
     End Sub
 
-    Dim tf As Single = 0.0
-    Dim af As Single = 0.01
-    Dim df As Single = 0.001
-
     Protected Overrides Sub OnRenderFrame(ByVal e As OpenTK.FrameEventArgs)
         MyBase.OnRenderFrame(e)
         GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
         shader.use()
         GL.BindVertexArray(vao)
-        shader.loadTime(tf)
         GL.DrawArrays(PrimitiveType.Triangles, 0, 3)
-
-        If tf > 0.3 Then
-            af -= df
-        End If
-
-        If tf <= -0.3 Then
-            af += df
-        End If
-
-        tf += af
 
         SwapBuffers()
     End Sub
@@ -146,7 +130,9 @@ End Class
 Public Class mainShader
     Inherits shader
 
-    Private location_time As Integer
+    Private location_projectionMatrix As Integer
+    Private location_transformationMatrix As Integer
+    Private location_viewMatrix As Integer
 
     Public Sub New(vert As String, frag As String)
         MyBase.New(vert, frag)
@@ -154,15 +140,16 @@ Public Class mainShader
 
     Public Overrides Sub bindAttributes()
         bindAttribute(0, "position")
+        bindAttribute(1, "textureCoordinates")
+        bindAttribute(2, "normal")
     End Sub
 
     Public Overrides Sub getAllUniformLocations()
-        location_time = MyBase.getUniformLocation("time")
+        location_projectionMatrix = MyBase.getUniformLocation("projectionMatrix")
+        location_transformationMatrix = MyBase.getUniformLocation("transformationMatrix")
+        location_viewMatrix = MyBase.getUniformLocation("viewMatrix")
     End Sub
 
-    Public Sub loadTime(d As Double)
-        MyBase.loadFloat(location_time, d)
-    End Sub
 
 End Class
 

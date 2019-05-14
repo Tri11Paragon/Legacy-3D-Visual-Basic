@@ -6,7 +6,7 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
-Public Class artist
+Public Class o_artist
 
     Public Shared Sub drawFace(ByRef texture As Integer, x As Double, y As Double, z As Double)
         GL.BindTexture(TextureTarget.Texture2D, texture)

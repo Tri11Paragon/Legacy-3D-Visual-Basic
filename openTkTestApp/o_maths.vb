@@ -6,7 +6,7 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
-Public Class maths
+Public Class o_maths
 
     Public Shared Function distance(p1 As Double, p2 As Double) As Double
         Return Math.Abs(p1 - p2)
@@ -26,7 +26,7 @@ Public Class maths
 
 End Class
 
-Public Class helper
+Public Class o_helper
 
     Public Shared Function removeSpaces(str As String) As String
         Dim ch As Char() = str.ToCharArray()
@@ -100,7 +100,7 @@ Public Class helper
 
 End Class
 
-Public Class timer
+Public Class o_timer
 
 
 

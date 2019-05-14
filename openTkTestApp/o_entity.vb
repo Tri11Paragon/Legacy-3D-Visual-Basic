@@ -6,7 +6,7 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
-Public Class entity
+Public Class o_entity
 
     Private x As Double
     Private y As Double
@@ -36,7 +36,7 @@ Public Class entity
     Public Sub draw()
         'Dim d As Vector3 = maths.distance(-camera.x, camera.y, -camera.z, Me.x, Me.y, Me.z)
         'If (d.X < 40 And d.Z < 40) And d.Y < 40 Then
-        artist.drawPolyQuad(polys.cube, Me.texture, Me.x, Me.y, Me.z)
+        o_artist.drawPolyQuad(o_polys.cube, Me.texture, Me.x, Me.y, Me.z)
         'End If
     End Sub
 

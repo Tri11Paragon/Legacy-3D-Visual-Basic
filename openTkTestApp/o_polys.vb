@@ -6,7 +6,7 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
-Public Class polys
+Public Class o_polys
 
     Public Shared cube(23) As touple(Of Vector3, Vector2)
 
@@ -33,11 +33,11 @@ Public Class polys
         Console.WriteLine(cf.Peek)
 
         Do While cf.Peek <> -1
-            Dim line As String = helper.fn_1293(cf.ReadLine())
+            Dim line As String = o_helper.fn_1293(cf.ReadLine())
             If Not line.Equals("skip") Then
                 Dim texData As String = ""
                 Dim vertData As String = ""
-                Dim spl As String() = helper.removeSpaces(line.Split("|"))
+                Dim spl As String() = o_helper.removeSpaces(line.Split("|"))
                 If spl(0).StartsWith("t:") Then
                     texData = spl(0).Split(":")(1)
                 End If
@@ -45,8 +45,8 @@ Public Class polys
                     vertData = spl(1).Split(":")(1)
                 End If
 
-                Dim txtPosData = helper.removeSpaces(texData.Split(","))
-                Dim vertPosData = helper.removeSpaces(vertData.Split(","))
+                Dim txtPosData = o_helper.removeSpaces(texData.Split(","))
+                Dim vertPosData = o_helper.removeSpaces(vertData.Split(","))
 
                 lst.Add(New touple(Of Vector3, Vector2)(New Vector3(Val(vertPosData(0)), Val(vertPosData(1)), Val(vertPosData(2))), New Vector2(Val(txtPosData(0)), Val(txtPosData(1)))))
 

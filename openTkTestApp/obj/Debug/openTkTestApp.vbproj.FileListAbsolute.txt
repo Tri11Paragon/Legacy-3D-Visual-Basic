@@ -1,13 +1,12 @@
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\openTkTestApp.exe.config
-H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.Resources.resources
-H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.vbproj.GenerateResource.Cache
-H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.xml
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\openTkTestApp.exe
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\openTkTestApp.pdb
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\openTkTestApp.xml
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\OpenTK.dll
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\OpenTK.pdb
 H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\OpenTK.xml
+H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.Resources.resources
+H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.vbproj.GenerateResource.Cache
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.exe
+H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.xml
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.pdb
-H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.vbprojResolveAssemblyReference.cache

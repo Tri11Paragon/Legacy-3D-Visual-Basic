@@ -8,7 +8,7 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
-Module Module1
+Module o_Module1
 
     Private Declare Function GetTickCount& Lib "kernel32" ()
 
@@ -78,24 +78,24 @@ Module Module1
             'GL.CullFace(CullFaceMode.Front)
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)
 
-            polys.loadPolys()
+            o_polys.loadPolys()
 
-            camera.ShowWindow(camera.GetConsoleWindow(), camera.SW_HIDE)
-            camera.load()
+            o_camera.ShowWindow(o_camera.GetConsoleWindow(), o_camera.SW_HIDE)
+            o_camera.load()
 
             LoadTextures()
 
-            entites.Add(New entity(textures(0), 0, 0, 5))
-            entites.Add(New entity(textures(1), 0, 5, 0))
-            entites.Add(New entity(textures(2), 0, 0, 0))
-            entites.Add(New entity(textures(3), 0, 0, -5))
-            entites.Add(New entity(textures(4), 5, 5, 0))
-            entites.Add(New entity(textures(5), 5, 5, 0))
-            entites.Add(New entity(textures(6), 5, 5, -5))
-            entites.Add(New entity(textures(7), 5, 0, 0))
-            entites.Add(New entity(textures(8), 5, -5, 0))
-            entites.Add(New entity(textures(9), -5, -5, 5))
-            entites.Add(New entity(textures(10), 5, -5, 5))
+            entites.Add(New o_entity(textures(0), 0, 0, 5))
+            entites.Add(New o_entity(textures(1), 0, 5, 0))
+            entites.Add(New o_entity(textures(2), 0, 0, 0))
+            entites.Add(New o_entity(textures(3), 0, 0, -5))
+            entites.Add(New o_entity(textures(4), 5, 5, 0))
+            entites.Add(New o_entity(textures(5), 5, 5, 0))
+            entites.Add(New o_entity(textures(6), 5, 5, -5))
+            entites.Add(New o_entity(textures(7), 5, 0, 0))
+            entites.Add(New o_entity(textures(8), 5, -5, 0))
+            entites.Add(New o_entity(textures(9), -5, -5, 5))
+            entites.Add(New o_entity(textures(10), 5, -5, 5))
 
         End Sub
 
@@ -118,7 +118,7 @@ Module Module1
         Public Shared pitch As Double = 0
         Public Shared yaw As Double = 0
 
-        Public Shared entites As List(Of entity) = New List(Of entity)
+        Public Shared entites As List(Of o_entity) = New List(Of o_entity)
 
         Dim start As Long
 
@@ -129,9 +129,9 @@ Module Module1
 
             GL.LoadIdentity()
 
-            If camera.dVr(4) Then
-                yaw += camera.dVr(2) * 0.5 * sensitivity
-                pitch += camera.dVr(3) * 0.3 * sensitivity
+            If o_camera.dVr(4) Then
+                yaw += o_camera.dVr(2) * 0.5 * sensitivity
+                pitch += o_camera.dVr(3) * 0.3 * sensitivity
             End If
 
             If (pitch > 90) Then
@@ -145,15 +145,15 @@ Module Module1
             GL.Rotate(-pitch, 1, 0, 0)
             GL.Rotate(-yaw, 0, 1, 0)
 
-            camera.update()
+            o_camera.update()
 
             angle += 1.5
 
             'GL.Enable(EnableCap.CullFace)
-            artist.drawTriangle(textures(7), -5, 0, 5)
+            o_artist.drawTriangle(textures(7), -5, 0, 5)
 
             'GL.Disable(EnableCap.CullFace)
-            For Each d As entity In entites
+            For Each d As o_entity In entites
                 d.update()
                 d.draw()
             Next
@@ -179,31 +179,31 @@ Module Module1
         End Sub
 
         Private Sub GLTexturedCube_KeyDown(sender As Object, e As KeyboardKeyEventArgs) Handles Me.KeyDown
-            camera.keyDown(e)
+            o_camera.keyDown(e)
         End Sub
 
         Private Sub GLTexturedCube_KeyUp(sender As Object, e As KeyboardKeyEventArgs) Handles Me.KeyUp
-            camera.keyReleased(e)
+            o_camera.keyReleased(e)
         End Sub
 
         Private Sub GLTexturedCube_KeyPress(sender As Object, e As KeyPressEventArgs) Handles Me.KeyPress
-            camera.keyPressed(e)
+            o_camera.keyPressed(e)
         End Sub
 
         Private Sub GLTexturedCube_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseDown
-            camera.mouseDown(e)
+            o_camera.mouseDown(e)
         End Sub
 
         Private Sub GLTexturedCube_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseUp
-            camera.mouseUp(e)
+            o_camera.mouseUp(e)
         End Sub
 
         Private Sub GLTexturedCube_MouseMove(sender As Object, e As MouseMoveEventArgs) Handles Me.MouseMove
-            camera.mouseMove(e)
+            o_camera.mouseMove(e)
         End Sub
 
         Private Sub GLTexturedCube_MouseWheel(sender As Object, e As MouseWheelEventArgs) Handles Me.MouseWheel
-            camera.mouseWheel(e)
+            o_camera.mouseWheel(e)
         End Sub
     End Class
 
