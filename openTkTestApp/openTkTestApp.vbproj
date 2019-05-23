@@ -74,7 +74,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="entites.vb" />
+    <Compile Include="n_entites.vb" />
     <Compile Include="o_artist.vb" />
     <Compile Include="o_camera.vb" />
     <Compile Include="o_entity.vb" />
@@ -96,8 +96,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="o_polys.vb" />
-    <Compile Include="renders.vb" />
-    <Compile Include="shader.vb" />
+    <Compile Include="n_renders.vb" />
+    <Compile Include="n_shader.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

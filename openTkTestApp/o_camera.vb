@@ -39,6 +39,7 @@ Public Class o_camera
                 dVr(0) = 0
             End If
             o_camera.ShowWindow(o_camera.GetConsoleWindow(), dVr(0))
+
         End If
         If e.ScanCode = 19 Then
             If dVr(1) = 0 Then
@@ -53,6 +54,11 @@ Public Class o_camera
         If e.ScanCode = Key.Escape Then
             Console.WriteLine("Exiting Program!")
             Process.GetCurrentProcess().CloseMainWindow()
+        End If
+        If e.ScanCode = Key.F12 Then
+            x = 0
+            y = 0
+            z = 0
         End If
     End Sub
 
@@ -128,9 +134,10 @@ Public Class o_camera
 
         'Console.WriteLine(CType(e.XDelta, String) + " : " + CType(e.YDelta, String))
 
+        If (dVr(0) <> 1) Then
+            SetCursorPos(DisplayDevice.Default.Width / 2, DisplayDevice.Default.Height / 2)
+        End If
         dVr(4) = 1
-
-        SetCursorPos(DisplayDevice.Default.Width / 2, DisplayDevice.Default.Height / 2)
 
         'dir(New Vector3(0, dVr(3), dVr(2)), 30)
     End Sub

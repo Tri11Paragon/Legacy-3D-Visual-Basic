@@ -15,7 +15,7 @@ Module o_Module1
     Public Sub Main()
         'Dim app As New GLTexturedCube
         'app.Run(60, 60)
-        Dim app As New shader_test
+        Dim app As New GLTexturedCube
         app.Run(60, 60)
     End Sub
 
@@ -81,6 +81,7 @@ Module o_Module1
             o_polys.loadPolys()
 
             o_camera.ShowWindow(o_camera.GetConsoleWindow(), o_camera.SW_HIDE)
+            MyBase.CursorVisible = False
             o_camera.load()
 
             LoadTextures()
@@ -125,6 +126,7 @@ Module o_Module1
         Protected Overrides Sub OnRenderFrame(ByVal e As OpenTK.FrameEventArgs)
             MyBase.OnRenderFrame(e)
             start = GetTickCount()
+            MyBase.CursorVisible = o_camera.dVr(0)
             GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
             GL.LoadIdentity()
@@ -134,14 +136,15 @@ Module o_Module1
                 pitch += o_camera.dVr(3) * 0.3 * sensitivity
             End If
 
-            If (pitch > 90) Then
+            If (-pitch > 90) Then
                 pitch = 90
             End If
 
-            If (pitch < -90) Then
+            If (-pitch < -90) Then
                 pitch = -90
             End If
 
+            ' could be Like negative
             GL.Rotate(-pitch, 1, 0, 0)
             GL.Rotate(-yaw, 0, 1, 0)
 
@@ -149,10 +152,10 @@ Module o_Module1
 
             angle += 1.5
 
-            'GL.Enable(EnableCap.CullFace)
+            GL.Rotate(angle, 0, 1, 0)
             o_artist.drawTriangle(textures(7), -5, 0, 5)
+            GL.Rotate(-angle, 0, 1, 0)
 
-            'GL.Disable(EnableCap.CullFace)
             For Each d As o_entity In entites
                 d.update()
                 d.draw()
@@ -160,22 +163,6 @@ Module o_Module1
 
             SwapBuffers()
             'Console.WriteLine(GetTickCount() - start)
-        End Sub
-
-        Public Sub bindRotation()
-            GL.Rotate(angle, 0, 0.1, 0.1)
-            GL.Rotate(angle, 0, 1, 0)
-            GL.Rotate(angle, 0.1, 0, 0)
-            GL.Rotate(angle, 0, 0.1, 0)
-            GL.Rotate(angle, 0, 0, 0.1)
-        End Sub
-
-        Public Sub unbindRotation()
-            GL.Rotate(-angle, 0, 0.1, 0.1)
-            GL.Rotate(-angle, 0, 1, 0)
-            GL.Rotate(-angle, 0.1, 0, 0)
-            GL.Rotate(-angle, 0, 0.1, 0)
-            GL.Rotate(-angle, 0, 0, 0.1)
         End Sub
 
         Private Sub GLTexturedCube_KeyDown(sender As Object, e As KeyboardKeyEventArgs) Handles Me.KeyDown

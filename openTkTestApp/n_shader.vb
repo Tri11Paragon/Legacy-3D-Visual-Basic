@@ -13,8 +13,68 @@ Public Class shader_test
     Dim height As Integer = 600
     Protected textures(50) As Integer
 
+    Private Declare Function GetTickCount& Lib "kernel32" ()
+
+    Dim data(50000) As Integer
+
+    Public Function organizeArray(ByRef data() As Integer) As Integer()
+
+        Dim start As Long = GetTickCount()
+
+        For g As Integer = 0 To data.Length
+            For i As Integer = g To data.Length - 1 : If (i >= 1) Then
+                    If (data(i) < data(i - 1)) Then
+                        data(i - 1) = data(i - 1) + data(i)
+                        data(i) = data(i - 1) - data(i)
+                        data(i - 1) = data(i - 1) - data(i)
+                    End If
+                End If
+            Next
+        Next
+
+        Console.WriteLine(GetTickCount() - start)
+
+        Return data
+    End Function
+
+    Public Function organizeArrayZEV(ByRef data() As Integer) As Integer()
+
+        Dim start As Long = GetTickCount()
+
+        Dim storage As Integer = 0
+        For m = 0 To data.Length - 1
+            For i = m To data.Length - 1
+                If (data(i) < data(m)) Then
+                    storage = data(i)
+                    data(i) = data(m)
+                    data(m) = storage
+                End If
+            Next
+        Next
+
+        Console.WriteLine("Zev Function gets: " & (GetTickCount() - start))
+
+        Return data
+    End Function
+
     Public Sub New()
         MyBase.New(800, 600, GraphicsMode.Default, "RMS", GameWindowFlags.Default, DisplayDevice.Default, 3, 2, GraphicsContextFlags.ForwardCompatible)
+        Randomize()
+        For i As Integer = 0 To data.Length - 1
+            data(i) = New Random(Rnd()).Next(0, 5000)
+        Next
+        Console.WriteLine("Starting the sort!")
+        Console.WriteLine(organizeArray(data))
+        Console.WriteLine("Stopping sort!")
+        For i As Integer = 0 To data.Length - 1
+            data(i) = New Random(Rnd()).Next(0, 5000)
+        Next
+        Console.WriteLine("Starting the Zev sort!")
+        Console.WriteLine(organizeArrayZEV(data))
+        Console.WriteLine("Stopping sort!")
+        'For i As Integer = 0 To data.Length - 1
+        'Console.WriteLine(data(i))
+        'Next
     End Sub
 
     Public verticies As Single() = {' positions   //   colors
@@ -61,7 +121,7 @@ Public Class shader_test
 
     Protected Overrides Sub OnLoad(ByVal e As System.EventArgs)
         MyBase.OnLoad(e)
-        GL.ClearColor(0.5, 0.5, 0.6, 0)
+
 
 
         'camera.ShowWindow(camera.GetConsoleWindow(), camera.SW_HIDE)
@@ -128,7 +188,7 @@ Public Class shader_test
 End Class
 
 Public Class mainShader
-    Inherits shader
+    Inherits n_shader
 
     Private location_projectionMatrix As Integer
     Private location_transformationMatrix As Integer
@@ -150,10 +210,21 @@ Public Class mainShader
         location_viewMatrix = MyBase.getUniformLocation("viewMatrix")
     End Sub
 
+    Public Sub loadViewMatrix(cam As camera)
+        MyBase.loadMatrix(location_viewMatrix, Maths.createViewMatrix(cam.x, cam.y, cam.z))
+    End Sub
+
+    Public Sub loadProjectionMatrix(proj As Matrix4d)
+        MyBase.loadMatrix(location_projectionMatrix, proj)
+    End Sub
+
+    Public Sub loadTransformationMatrix(mat As Matrix4d)
+        MyBase.loadMatrix(location_transformationMatrix, mat)
+    End Sub
 
 End Class
 
-Public Class shader
+Public Class n_shader
 
     Private programID As Integer
     Private vertexID As Integer

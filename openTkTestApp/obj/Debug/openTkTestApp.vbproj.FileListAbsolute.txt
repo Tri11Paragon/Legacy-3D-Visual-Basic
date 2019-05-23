@@ -10,3 +10,4 @@ H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.vbproj.Generate
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.exe
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.xml
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.pdb
+H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.vbprojResolveAssemblyReference.cache

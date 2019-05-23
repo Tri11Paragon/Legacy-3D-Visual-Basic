@@ -589,6 +589,10 @@ End Class
 
 Public Class Maths
 
+    'a=a+b;
+    'b=a-b;
+    'a=a-b;
+
     Shared width As Integer
     Shared height As Integer
 
