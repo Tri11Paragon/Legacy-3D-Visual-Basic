@@ -11,7 +11,6 @@ Public Class o_artist
     Public Shared Sub drawFace(ByRef texture As Integer, x As Double, y As Double, z As Double)
         GL.BindTexture(TextureTarget.Texture2D, texture)
         GL.Translate(x, y, z)
-        'GL.Rotate(0, 0, 0, 0)
         drawFace()
         GL.Translate(-x, -y, -z)
     End Sub
@@ -40,7 +39,12 @@ Public Class o_artist
     Public Shared Sub drawPolyQuad(ByRef vt() As touple(Of Vector3, Vector2), ByRef texture As Integer, x As Double, y As Double, z As Double)
         GL.BindTexture(TextureTarget.Texture2D, texture)
         GL.Translate(x, y, z)
-        drawPolyQuad(vt)
+        GL.EnableClientState(ArrayCap.VertexArray)
+        Dim meshVertices = o_polys.dd.vertices.ToArray()
+        GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
+        Dim meshVertexIndices = o_polys.dd.vertexIndices.ToArray()
+        'GL.DrawElements(PrimitiveType.Triangles, o_polys.dd.vertexIndices.Count, DrawElementsType.UnsignedInt, meshVertexIndices)
+        GL.DisableClientState(ArrayCap.VertexArray)
         GL.Translate(-x, -y, -z)
     End Sub
 
