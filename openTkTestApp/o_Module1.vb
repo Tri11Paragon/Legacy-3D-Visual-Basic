@@ -11,11 +11,12 @@ Imports OpenTK.Input
 Module o_Module1
 
     Private Declare Function GetTickCount& Lib "kernel32" ()
+    Public app As New GLTexturedCube
+
 
     Public Sub Main()
         'Dim app As New GLTexturedCube
         'app.Run(60, 60)
-        Dim app As New GLTexturedCube
         app.Run(60, 60)
     End Sub
 
@@ -26,7 +27,8 @@ Module o_Module1
         Protected textures(50) As Integer
 
         Public Sub New()
-            MyBase.New(800, 600, GraphicsMode.Default, "RMS")
+            MyBase.New(800, 600, New GraphicsMode(New ColorFormat(8, 8, 8, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 3, 2, GraphicsContextFlags.ForwardCompatible)
+
         End Sub
 
         'Protected Overrides Sub OnKeyPress(OpenTK.KeyPressEventArgs e)

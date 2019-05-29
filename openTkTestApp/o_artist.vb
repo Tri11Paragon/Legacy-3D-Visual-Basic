@@ -29,7 +29,7 @@ Public Class o_artist
         GL.Translate(-x, -y, -z)
     End Sub
 
-    Public Shared Sub drawPoly(ByRef vt() As touple(Of Vector3, Vector2), ByRef texture As Integer, x As Double, y As Double, z As Double)
+    Public Shared Sub drawPoly(ByRef vt As List(Of touple(Of Vector3, Vector2)), ByRef texture As Integer, x As Double, y As Double, z As Double)
         GL.BindTexture(TextureTarget.Texture2D, texture)
         GL.Translate(x, y, z)
         drawPoly(vt)
@@ -39,12 +39,7 @@ Public Class o_artist
     Public Shared Sub drawPolyQuad(ByRef vt() As touple(Of Vector3, Vector2), ByRef texture As Integer, x As Double, y As Double, z As Double)
         GL.BindTexture(TextureTarget.Texture2D, texture)
         GL.Translate(x, y, z)
-        GL.EnableClientState(ArrayCap.VertexArray)
-        Dim meshVertices = o_polys.dd.vertices.ToArray()
-        GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
-        Dim meshVertexIndices = o_polys.dd.vertexIndices.ToArray()
-        'GL.DrawElements(PrimitiveType.Triangles, o_polys.dd.vertexIndices.Count, DrawElementsType.UnsignedInt, meshVertexIndices)
-        GL.DisableClientState(ArrayCap.VertexArray)
+        drawPolyQuad(vt)
         GL.Translate(-x, -y, -z)
     End Sub
 
@@ -134,7 +129,7 @@ Public Class o_artist
         GL.End()
     End Sub
 
-    Private Shared Sub drawPoly(tu() As touple(Of Vector3, Vector2))
+    Private Shared Sub drawPoly(tu As List(Of touple(Of Vector3, Vector2)))
         GL.Begin(PrimitiveType.Triangles)
         For Each d In tu
             GL.TexCoord2(d.Y_().X, d.Y_.Y) : GL.Vertex3(d.X_.X, d.X_.Y, d.X_.Z)

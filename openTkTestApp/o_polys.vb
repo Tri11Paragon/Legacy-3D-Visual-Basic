@@ -9,7 +9,7 @@ Imports OpenTK.Input
 Public Class o_polys
 
     Public Shared cube(23) As touple(Of Vector3, Vector2)
-    Public Shared dd As Mesh
+    Public Shared dd As BMesh
 
     Private Shared Sub loadCube()
         cube = loadFromFile("cube").ToArray()
@@ -20,8 +20,67 @@ Public Class o_polys
             cube(i) = New touple(Of Vector3, Vector2)()
         Next
         loadCube()
-        dd = Load("primitives/cubeie.obj")
+        dd = heyGetOBJ("baaaaaad-sheep")
     End Sub
+
+    Public Shared Function createData(mesh As BMesh) As touple(Of Vector3, Vector2)()
+        Dim vert As Vector3() = mesh.vertices.ToArray()
+        Dim text As Vector2() = mesh.textureVertices.ToArray()
+
+        Dim r As List(Of Vector3)
+
+        For Each i In mesh.vertexIndices
+            r.Add(vert(i))
+        Next
+
+    End Function
+
+    'this is my function
+    Public Shared Function heyGetOBJ(p As String) As BMesh
+        Dim vertices As List(Of Vector3) = New List(Of Vector3)()
+        Dim textureVertices As List(Of Vector2) = New List(Of Vector2)()
+        Dim vertexIndices As List(Of Integer) = New List(Of Integer)()
+        Dim textureIndices As List(Of Integer) = New List(Of Integer)()
+
+        If Not File.Exists("primitives/" & p & ".obj") Then
+            Throw New FileNotFoundException("Unable to open " & p & ", does not exist.")
+        End If
+
+        Dim FS As New FileStream("primitives/" & p & ".obj", FileMode.Open, FileAccess.Read)
+        Dim cf As New StreamReader(FS)
+
+        Do While cf.Peek <> -1
+            Dim line As String = o_helper.fn_1293(cf.ReadLine())
+            If Not line.Equals("skip") Then
+                Dim data As List(Of String) = New List(Of String)(line.ToLower().Split(" "))
+                data.RemoveAll(Function(s) s = String.Empty)
+                Dim t = data(0)
+                data.RemoveAt(0)
+
+                Select Case t
+                    Case "v"
+                        vertices.Add(New Vector3(Val(data(0)), Val(data(1)), Val(data(2))))
+                    Case "vt"
+                        textureVertices.Add(New Vector2(Val(data(0)), Val(data(1))))
+                    Case "f"
+                        For Each s As String In data
+                            If s.Length = 0 Then Continue For
+                            Dim ind() = s.Split("/")
+                            ' first and second one is the only important info
+                            vertexIndices.Add(Val(ind(0)))
+                            textureIndices.Add(Val(ind(1)))
+                        Next
+                End Select
+            End If
+        Loop
+
+
+        cf.Close()
+        FS.Close()
+
+        Return New BMesh(vertices, textureVertices, vertexIndices, textureIndices)
+
+    End Function
 
     Public Shared Function loadFromFile(primitiveName As String) As List(Of touple(Of Vector3, Vector2))
         Dim lst As List(Of touple(Of Vector3, Vector2)) = New List(Of touple(Of Vector3, Vector2))
@@ -61,41 +120,7 @@ Public Class o_polys
         Return lst
     End Function
 
-    'this is my function
-    Public Function heyGetOBJ(p As String) As Mesh
-        Dim vertices As List(Of Vector3) = New List(Of Vector3)()
-        Dim textureVertices As List(Of Vector3) = New List(Of Vector3)()
-        Dim normals As List(Of Vector3) = New List(Of Vector3)()
-        Dim vertexIndices As List(Of Integer) = New List(Of Integer)()
-        Dim textureIndices As List(Of Integer) = New List(Of Integer)()
-        Dim normalIndices As List(Of Integer) = New List(Of Integer)()
-
-        If Not File.Exists(p) Then
-            Throw New FileNotFoundException("Unable to open " & p & ", does not exist.")
-        End If
-
-        Dim FS As New FileStream("primitives/" & p & ".obj", FileMode.Open, FileAccess.Read)
-        Dim cf As New StreamReader(FS)
-
-        Do While cf.Peek <> -1
-            Dim line As String = o_helper.fn_1293(cf.ReadLine())
-            If Not line.Equals("skip") Then
-
-                If line.StartsWith("v") Then
-                    Dim textData() = line.Split(" ")
-                    vertices.Add(New Vector3(Val(textData(1)), Val(textData(2)), Val(textData(3))))
-                End If
-
-            End If
-        Loop
-
-
-        cf.Close()
-        FS.Close()
-
-    End Function
-
-    'basic Gl for rendering. Does not work with my engine?
+    'basic Gl for rendering. Does not work
     'GL.EnableClientState(ArrayCap.VertexArray)
     'Dim meshVertices = o_polys.dd.vertices.ToArray()
     '   GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
@@ -132,11 +157,11 @@ Public Class o_polys
 
                 Select Case type
                     Case "v"
-                        'vertices.Add(New Vector3(Single.Parse(words(1)), Single.Parse(words(2)), Single.Parse(words(3))))
+                        vertices.Add(New Vector3(Single.Parse(words(1)), Single.Parse(words(2)), Single.Parse(words(3))))
                     Case "vt"
-                        'textureVertices.Add(New Vector2(Single.Parse(words(1)), Single.Parse(words(2))))
+                        textureVertices.Add(New Vector2(Single.Parse(words(1)), Single.Parse(words(2))))
                     Case "vn"
-                        'normals.Add(New Vector3(Single.Parse(words(1)), Single.Parse(words(2)), Single.Parse(words(3))))
+                        normals.Add(New Vector3(Single.Parse(words(1)), Single.Parse(words(2)), Single.Parse(words(3))))
                     Case "f"
 
                         For Each w As String In words
@@ -170,6 +195,21 @@ Public Class o_polys
             Me.vertexIndices = vertexIndices
             Me.textureIndices = textureIndices
             Me.normalIndices = normalIndices
+
+        End Sub
+    End Class
+
+    Public Class BMesh
+        Public ReadOnly vertices As List(Of Vector3)
+        Public ReadOnly textureVertices As List(Of Vector2)
+        Public ReadOnly vertexIndices As List(Of Integer)
+        Public ReadOnly textureIndices As List(Of Integer)
+
+        Public Sub New(ByVal vertices As List(Of Vector3), ByVal textureVertices As List(Of Vector2), ByVal vertexIndices As List(Of Integer), ByVal textureIndices As List(Of Integer))
+            Me.vertices = vertices
+            Me.textureVertices = textureVertices
+            Me.vertexIndices = vertexIndices
+            Me.textureIndices = textureIndices
 
         End Sub
     End Class

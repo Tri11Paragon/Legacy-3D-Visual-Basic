@@ -5,6 +5,9 @@ Imports OpenTK.Graphics.OpenGL
 Imports System
 Imports System.Configuration
 Imports System.Data
+Imports System.Drawing
+Imports System.Drawing.Imaging
+Imports System.IO
 
 Public Class o_camera
 
@@ -59,6 +62,9 @@ Public Class o_camera
             x = 0
             y = 0
             z = 0
+        End If
+        If e.ScanCode = Key.F2 Then
+            takePicture(Date.Now.Year & "-" & Date.Now.Month & "-" & Date.Now.Day & "-" & Date.Now.Hour & "-" & Date.Now.Minute & "-" & Date.Now.Second & "-" & Date.Now.Millisecond & ".png", ImageFormat.Png, 0, 0, o_Module1.app.Width, o_Module1.app.Height)
         End If
     End Sub
 
@@ -140,6 +146,24 @@ Public Class o_camera
         dVr(4) = 1
 
         'dir(New Vector3(0, dVr(3), dVr(2)), 30)
+    End Sub
+
+    Public Shared Sub takePicture(file As String, format As ImageFormat, x As Integer, y As Integer, w As Integer, h As Integer)
+        o_Module1.app.SwapBuffers()
+        Dim pixels(w * h * 4) As Byte
+        Dim bi As Bitmap = New Bitmap(w, h)
+        Dim rect As Rectangle = New Rectangle(x, y, bi.Width, bi.Height)
+
+        GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4)
+        GL.ReadPixels(x, y, w, h, OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, pixels)
+
+
+        Dim bit As BitmapData = bi.LockBits(rect, ImageLockMode.ReadWrite, bi.PixelFormat)
+        System.Runtime.InteropServices.Marshal.Copy(pixels, 0, bit.Scan0, pixels.Length())
+        bi.UnlockBits(bit)
+        bi.RotateFlip(RotateFlipType.RotateNoneFlipY)
+        bi.Save("screenshots/" & file, ImageFormat.Png)
+        o_Module1.app.SwapBuffers()
     End Sub
 
     Public Shared Sub mouseWheel(e As MouseWheelEventArgs)
