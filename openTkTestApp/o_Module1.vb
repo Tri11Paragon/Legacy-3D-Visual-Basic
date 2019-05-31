@@ -158,6 +158,8 @@ Module o_Module1
             o_artist.drawTriangle(textures(7), -5, 0, 5)
             GL.Rotate(-angle, 0, 1, 0)
 
+            o_artist.drawMesh(o_polys.m, textures(8), 10, 10, 0)
+
             For Each d As o_entity In entites
                 d.update()
                 d.draw()

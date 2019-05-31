@@ -29,10 +29,17 @@ Public Class o_artist
         GL.Translate(-x, -y, -z)
     End Sub
 
-    Public Shared Sub drawPoly(ByRef vt As List(Of touple(Of Vector3, Vector2)), ByRef texture As Integer, x As Double, y As Double, z As Double)
+    Public Shared Sub drawPoly(ByRef vt As List(Of o_polys.BFace), ByRef texture As Integer, x As Double, y As Double, z As Double)
         GL.BindTexture(TextureTarget.Texture2D, texture)
         GL.Translate(x, y, z)
         drawPoly(vt)
+        GL.Translate(-x, -y, -z)
+    End Sub
+
+    Public Shared Sub drawMesh(ByRef m As o_polys.Mesh, ByRef texture As Integer, x As Double, y As Double, z As Double)
+        GL.BindTexture(TextureTarget.Texture2D, texture)
+        GL.Translate(x, y, z)
+        drawMesh(m)
         GL.Translate(-x, -y, -z)
     End Sub
 
@@ -129,12 +136,32 @@ Public Class o_artist
         GL.End()
     End Sub
 
-    Private Shared Sub drawPoly(tu As List(Of touple(Of Vector3, Vector2)))
+    ' does not work
+    Private Shared Sub drawPoly(tu As List(Of o_polys.BFace))
         GL.Begin(PrimitiveType.Triangles)
-        For Each d In tu
-            GL.TexCoord2(d.Y_().X, d.Y_.Y) : GL.Vertex3(d.X_.X, d.X_.Y, d.X_.Z)
+        For Each f In tu
+            GL.TexCoord2(f.t1) : GL.Vertex3(f.v1)
+            GL.TexCoord2(f.t2) : GL.Vertex3(f.v2)
+            GL.TexCoord2(f.t3) : GL.Vertex3(f.v3)
         Next
         GL.End()
+    End Sub
+
+    Private Shared Sub drawMesh(m As o_polys.Mesh)
+        GL.PushMatrix()
+        GL.EnableClientState(ArrayCap.VertexArray)
+        GL.EnableClientState(ArrayCap.TextureCoordArray)
+        Dim meshVertices = m.vertices.ToArray()
+        Dim meshVertexIndices = m.vertexIndices.ToArray()
+        Dim meshTexture = m.textureVertices.ToArray()
+        Dim meshTextureIndices = m.textureIndices.ToArray()
+        GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
+        GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, meshTexture)
+        'GL.DrawArrays(PrimitiveType.Triangles, 0, final.Count)
+        GL.DrawElements(PrimitiveType.Triangles, meshVertexIndices.Count, DrawElementsType.UnsignedInt, meshVertexIndices)
+        GL.DisableClientState(ArrayCap.VertexArray)
+        GL.DisableClientState(ArrayCap.TextureCoordArray)
+        GL.PopMatrix()
     End Sub
 
     Private Shared Sub drawPolyQuad(tu() As touple(Of Vector3, Vector2))
