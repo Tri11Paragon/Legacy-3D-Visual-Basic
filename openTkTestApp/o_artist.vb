@@ -5,6 +5,7 @@ Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
+Imports System.ValueTuple
 
 Public Class o_artist
 
@@ -152,13 +153,14 @@ Public Class o_artist
         GL.EnableClientState(ArrayCap.VertexArray)
         GL.EnableClientState(ArrayCap.TextureCoordArray)
         Dim meshVertices = m.vertices.ToArray()
-        Dim meshVertexIndices = m.vertexIndices.ToArray()
         Dim meshTexture = m.textureVertices.ToArray()
-        Dim meshTextureIndices = m.textureIndices.ToArray()
         GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
         GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, meshTexture)
-        'GL.DrawArrays(PrimitiveType.Triangles, 0, final.Count)
-        GL.DrawElements(PrimitiveType.Triangles, meshVertexIndices.Count, DrawElementsType.UnsignedInt, meshVertexIndices)
+        Try
+            GL.DrawArrays(PrimitiveType.Triangles, 0, meshVertices.Length)
+        Catch e As System.AccessViolationException
+            Console.WriteLine(e.StackTrace)
+        End Try
         GL.DisableClientState(ArrayCap.VertexArray)
         GL.DisableClientState(ArrayCap.TextureCoordArray)
         GL.PopMatrix()

@@ -10,7 +10,7 @@ Public Class o_polys
 
     Public Shared cube(23) As touple(Of Vector3, Vector2)
     Public Shared dd As List(Of BFace)
-    Public Shared m As Mesh
+    Public Shared mouseMesh As Mesh
 
     Private Shared Sub loadCube()
         cube = loadFromFile("cube").ToArray()
@@ -22,7 +22,7 @@ Public Class o_polys
         Next
         loadCube()
         dd = createData(heyGetOBJ("cube"))
-        m = Load("primitives/baaaaaad-sheep.obj")
+        mouseMesh = BLoad("primitives/bever.obj")
     End Sub
 
     Public Shared Function createData(mesh As BMesh) As List(Of BFace)
@@ -62,7 +62,7 @@ Public Class o_polys
                 Dim t = data(0)
                 data.RemoveAt(0)
 
-                Console.WriteLine(t)
+                'Console.WriteLine(t)
 
                 Select Case t
                     Case "v"
@@ -104,9 +104,9 @@ Public Class o_polys
         Dim vertices As List(Of Vector3) = New List(Of Vector3)()
         Dim textureVertices As List(Of Vector2) = New List(Of Vector2)()
         Dim normals As List(Of Vector3) = New List(Of Vector3)()
-        Dim vertexIndices As List(Of Integer) = New List(Of Integer)()
-        Dim textureIndices As List(Of Integer) = New List(Of Integer)()
-        Dim normalIndices As List(Of Integer) = New List(Of Integer)()
+        Dim vertexIndices As List(Of UInteger) = New List(Of UInteger)()
+        Dim textureIndices As List(Of UInteger) = New List(Of UInteger)()
+        Dim normalIndices As List(Of UInteger) = New List(Of UInteger)()
 
         If Not File.Exists(path) Then
             Throw New FileNotFoundException("Unable to open " & path & ", does not exist.")
@@ -121,7 +121,7 @@ Public Class o_polys
                 Dim type As String = words(0)
                 words.RemoveAt(0)
 
-                Console.WriteLine(words.Count)
+                'Console.WriteLine(words.Count)
 
                 Select Case type
                     Case "v"
@@ -148,15 +148,68 @@ Public Class o_polys
         Return New Mesh(vertices, textureVertices, normals, vertexIndices, textureIndices, normalIndices)
     End Function
 
+    ' i made this one. ( i copied ^ and modified it)
+    ' to hopefully work
+    Public Shared Function BLoad(ByVal path As String) As Mesh
+        Dim verts As List(Of Vector3) = New List(Of Vector3)
+        Dim vertices As List(Of Vector3) = New List(Of Vector3)()
+        Dim texts As List(Of Vector2) = New List(Of Vector2)
+        Dim textureVertices As List(Of Vector2) = New List(Of Vector2)()
+        Dim normals As List(Of Vector3) = New List(Of Vector3)()
+        Dim vertexIndices As List(Of UInteger) = New List(Of UInteger)()
+        Dim textureIndices As List(Of UInteger) = New List(Of UInteger)()
+        Dim normalIndices As List(Of UInteger) = New List(Of UInteger)()
+
+        If Not File.Exists(path) Then
+            Throw New FileNotFoundException("Unable to open " & path & ", does not exist.")
+        End If
+
+        Using streamReader As StreamReader = New StreamReader(path)
+
+            While Not streamReader.EndOfStream
+                Dim words As List(Of String) = New List(Of String)(streamReader.ReadLine().ToLower().Split(" "))
+                words.RemoveAll(Function(s) s = String.Empty)
+                If words.Count = 0 Then Continue While
+                Dim type As String = words(0)
+                words.RemoveAt(0)
+
+                'Console.WriteLine(words.Count)
+
+                Select Case type
+                    Case "v"
+                        verts.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
+                    Case "vt"
+                        texts.Add(New Vector2(Single.Parse(words(0)), Single.Parse(words(1))))
+                    Case "vn"
+                        normals.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
+                    Case "f"
+
+                        For Each w As String In words
+                            'Console.WriteLine(w)
+                            If w.Length = 0 Then Continue For
+                            Dim comps As String() = w.Split("/")
+                            vertices.Add(verts(UInteger.Parse(comps(0)) - 1))
+                            If comps.Length > 1 AndAlso comps(1).Length <> 0 Then textureVertices.Add(texts(UInteger.Parse(comps(1)) - 1))
+                            If comps.Length > 2 Then normalIndices.Add(UInteger.Parse(comps(2)) - 1)
+                        Next
+
+                    Case Else
+                End Select
+            End While
+        End Using
+
+        Return New Mesh(vertices, textureVertices, normals, vertexIndices, textureIndices, normalIndices)
+    End Function
+
     Public Class Mesh
         Public ReadOnly vertices As List(Of Vector3)
         Public ReadOnly textureVertices As List(Of Vector2)
         Public ReadOnly normals As List(Of Vector3)
-        Public ReadOnly vertexIndices As List(Of Integer)
-        Public ReadOnly textureIndices As List(Of Integer)
-        Public ReadOnly normalIndices As List(Of Integer)
+        Public ReadOnly vertexIndices As List(Of UInteger)
+        Public ReadOnly textureIndices As List(Of UInteger)
+        Public ReadOnly normalIndices As List(Of UInteger)
 
-        Public Sub New(ByVal vertices As List(Of Vector3), ByVal textureVertices As List(Of Vector2), ByVal normals As List(Of Vector3), ByVal vertexIndices As List(Of Integer), ByVal textureIndices As List(Of Integer), ByVal normalIndices As List(Of Integer))
+        Public Sub New(ByVal vertices As List(Of Vector3), ByVal textureVertices As List(Of Vector2), ByVal normals As List(Of Vector3), ByVal vertexIndices As List(Of UInteger), ByVal textureIndices As List(Of UInteger), ByVal normalIndices As List(Of UInteger))
             Me.vertices = vertices
             Me.textureVertices = textureVertices
             Me.normals = normals

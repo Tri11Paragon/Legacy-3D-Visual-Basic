@@ -11,3 +11,5 @@ H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.exe
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.xml
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.pdb
 H:\Documents\openTkTestApp\openTkTestApp\obj\Debug\openTkTestApp.vbprojResolveAssemblyReference.cache
+H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\System.ValueTuple.dll
+H:\Documents\openTkTestApp\openTkTestApp\bin\Debug\System.ValueTuple.xml

@@ -27,7 +27,7 @@ Module o_Module1
         Protected textures(50) As Integer
 
         Public Sub New()
-            MyBase.New(800, 600, New GraphicsMode(New ColorFormat(8, 8, 8, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 3, 2, GraphicsContextFlags.ForwardCompatible)
+            MyBase.New(800, 600, New GraphicsMode(New ColorFormat(8, 8, 8, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
 
         End Sub
 
@@ -158,7 +158,7 @@ Module o_Module1
             o_artist.drawTriangle(textures(7), -5, 0, 5)
             GL.Rotate(-angle, 0, 1, 0)
 
-            o_artist.drawMesh(o_polys.m, textures(8), 10, 10, 0)
+            o_artist.drawMesh(o_polys.mouseMesh, textures(6), 10, 10, 0)
 
             For Each d As o_entity In entites
                 d.update()
