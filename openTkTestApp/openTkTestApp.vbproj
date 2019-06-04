@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3CD93FE0-E804-4DCE-A8CB-34C2C2CE6F46}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>openTkTestApp.o_Module1</StartupObject>
+    <StartupObject>openTkTestApp.Module1</StartupObject>
     <RootNamespace>openTkTestApp</RootNamespace>
     <AssemblyName>openTkTestApp</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -78,12 +78,11 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="n_entites.vb" />
-    <Compile Include="o_artist.vb" />
-    <Compile Include="o_camera.vb" />
-    <Compile Include="o_entity.vb" />
-    <Compile Include="o_maths.vb" />
-    <Compile Include="o_Module1.vb" />
+    <Compile Include="artist.vb" />
+    <Compile Include="camera.vb" />
+    <Compile Include="entity.vb" />
+    <Compile Include="maths.vb" />
+    <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -99,9 +98,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="o_polys.vb" />
-    <Compile Include="n_renders.vb" />
-    <Compile Include="n_shader.vb" />
+    <Compile Include="polys.vb" />
+    <Compile Include="world.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
