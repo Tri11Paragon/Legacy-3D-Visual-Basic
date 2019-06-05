@@ -30,14 +30,22 @@ Public Class artist
         GL.Color3(255, 255, 255)
     End Sub
 
-    Private Shared Sub drawMesh(m As Mesh)
+    Public Shared Sub drawMesh(m As Mesh)
+        GL.PushMatrix()
         GL.EnableClientState(ArrayCap.VertexArray)
         GL.EnableClientState(ArrayCap.TextureCoordArray)
-        GL.VertexPointer(3, VertexPointerType.Float, 0, m.vertices.ToArray())
-        GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, m.textureVertices.ToArray())
-        GL.DrawArrays(PrimitiveType.Triangles, 0, m.vertices.ToArray().Length)
+        Dim meshVertices = m.vertices.ToArray()
+        Dim meshTexture = m.textureVertices.ToArray()
+        GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
+        GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, meshTexture)
+        Try
+            GL.DrawArrays(PrimitiveType.Triangles, 0, meshVertices.Length)
+        Catch e As System.AccessViolationException
+            Console.WriteLine(e.StackTrace)
+        End Try
         GL.DisableClientState(ArrayCap.VertexArray)
         GL.DisableClientState(ArrayCap.TextureCoordArray)
+        GL.PopMatrix()
     End Sub
 End Class
 

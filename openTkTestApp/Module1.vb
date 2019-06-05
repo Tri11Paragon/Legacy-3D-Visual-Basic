@@ -82,6 +82,7 @@ Module Module1
             LoadTexture(world.textures(9), "l3lmzb0a2xw21.jpg")
             LoadTexture(world.textures(10), "ab4pjx3bnww21.jpg")
             LoadTexture(world.textures(11), "pig.png")
+            LoadTexture(world.textures(12), "skybox/cube.png")
             LoadTexture(world.textures(100), "skybox/back.png")
             LoadTexture(world.textures(101), "skybox/bottom.png")
             LoadTexture(world.textures(102), "skybox/front.png")
@@ -137,6 +138,8 @@ Module Module1
             world.entites.Add(New entity(polys.pigMesh, world.textures(10), 5, -5, 5))
             world.entites.Add(New entity(polys.pigMesh, world.textures(11), 5, -5, 5))
 
+            gui.create()
+
         End Sub
 
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
@@ -154,7 +157,6 @@ Module Module1
             GL.LoadIdentity()
         End Sub
 
-        Public Shared sensitivity = 0.75
         Public Shared pitch As Double = 0
         Public Shared yaw As Double = 0
 
@@ -163,11 +165,12 @@ Module Module1
             MyBase.CursorVisible = camera.dVr(0)
             GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
+            gui.render()
             GL.LoadIdentity()
 
-            If camera.dVr(4) Then
-                yaw += camera.dVr(2) * 0.5 * sensitivity
-                pitch += camera.dVr(3) * 0.3 * sensitivity
+            If camera.dVr(4) And Not gui.isEscapeOpen Then
+                yaw += camera.dVr(2) * 0.5 * settings.sensitivity
+                pitch += camera.dVr(3) * 0.3 * settings.sensitivity
             End If
 
             If (-pitch > 90) Then
@@ -178,7 +181,6 @@ Module Module1
                 pitch = -90
             End If
 
-            ' could be Like negative
             GL.Rotate(-pitch, 1, 0, 0)
             GL.Rotate(-yaw, 0, 1, 0)
 
@@ -193,47 +195,7 @@ Module Module1
                 d.draw()
             Next
 
-            drawSkybox()
-
             SwapBuffers()
-        End Sub
-
-        ' could not find anything on this, so i have to make my own.
-        Public Shared Sub drawSkybox()
-            GL.Translate(5, 5, 5)
-
-            'Dim leftTex As Integer = world.textures(103)
-            'Dim rightTex As Integer = world.textures(104)
-            'Dim bottomTex As Integer = world.textures(101)
-            'Dim topTex As Integer = world.textures(105)
-            Dim size As Integer = 10
-
-            Dim verts As Integer() = {-size, size, -size, -size, -size, -size, size, -size, -size, size, -size, -size, size, size, -size, -size, size, -size, -size, -size, size, -size, -size, -size, -size, size, -size, -size, size, -size, -size, size, size, -size, -size, size, size, -size, -size, size, -size, size, size, size, size, size, size, size, size, size, -size, size, -size, -size, -size, -size, size, -size, size, size, size, size, size, size, size, size, size, -size, size, -size, -size, size, -size, size, -size, size, size, -size, size, size, size, size, size, size, -size, size, size, -size, size, -size, -size, -size, -size, -size, -size, size, size, -size, -size, size, -size, -size, -size, -size, size, size, -size, size}
-            Dim texts As Vector2() = {New Vector2(0, 0), New Vector2(1, 0), New Vector2(1, 1), New Vector2(0, 0)}
-
-            'front
-            GL.Translate(10, 0, 0)
-            GL.BindTexture(TextureTarget.Texture2D, world.textures(102))
-            GL.EnableClientState(ArrayCap.VertexArray)
-            GL.EnableClientState(ArrayCap.TextureCoordArray)
-            GL.VertexPointer(3, VertexPointerType.Float, 0, verts)
-            'GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, texts.ToArray())
-            GL.DrawArrays(PrimitiveType.Triangles, 0, verts.Length)
-            GL.DisableClientState(ArrayCap.VertexArray)
-            GL.DisableClientState(ArrayCap.TextureCoordArray)
-            GL.Translate(-10, 0, 0)
-
-
-            'back
-            'GL.Translate(-10, 0, 0)
-            'GL.BindTexture(TextureTarget.Texture2D, world.textures(100))
-            'GL.TexCoord2(0.0, 0.0) : GL.Vertex3(-1, 1, -1)
-            'GL.TexCoord2(0.0, 1.0) : GL.Vertex3(-1, -1, -1)
-            'GL.TexCoord2(1.0, 1.0) : GL.Vertex3(-1, -1, 1)
-            'GL.TexCoord2(1.0, 0.0) : GL.Vertex3(-1, 1, 1)
-            'GL.Translate(10, 0, 0)
-
-            GL.Translate(-5, -5, -5)
         End Sub
 
         Private Sub GLTexturedCube_KeyDown(sender As Object, e As KeyboardKeyEventArgs) Handles Me.KeyDown

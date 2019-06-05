@@ -81,6 +81,7 @@
     <Compile Include="artist.vb" />
     <Compile Include="camera.vb" />
     <Compile Include="entity.vb" />
+    <Compile Include="gui.vb" />
     <Compile Include="maths.vb" />
     <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -99,6 +100,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="polys.vb" />
+    <Compile Include="settings.vb" />
     <Compile Include="world.vb" />
   </ItemGroup>
   <ItemGroup>

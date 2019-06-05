@@ -11,11 +11,13 @@ Public Class polys
     Public Shared mouseMesh As Mesh
     Public Shared pigMesh As Mesh
     Public Shared terrainMesh As Mesh
+    Public Shared cubeMesh As Mesh
 
     Public Shared Sub loadPolys()
         mouseMesh = BLoad("primitives/bever.obj")
         pigMesh = BLoad("primitives/pig.obj")
         terrainMesh = BLoad("primitives/terrain1.obj")
+        cubeMesh = BLoad("primitives/cube.obj")
     End Sub
 
     ' this is credited to https://github.com/dabbertorres/ObjRenderer

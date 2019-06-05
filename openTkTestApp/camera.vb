@@ -22,7 +22,6 @@ Public Class camera
 
     Public Shared x, y, z As Double
     Shared moveAtX, moveAtY As Double
-    Shared speed As Double = 0.2
     Public Shared enableVirtical As Boolean = False
 
     Public Shared Sub load()
@@ -30,7 +29,7 @@ Public Class camera
     End Sub
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
-
+        gui.keyPressed(e)
     End Sub
 
     Public Shared Sub keyReleased(e As KeyboardKeyEventArgs)
@@ -56,7 +55,8 @@ Public Class camera
         End If
         If e.ScanCode = Key.Escape Then
             Console.WriteLine("Exiting Program!")
-            Process.GetCurrentProcess().CloseMainWindow()
+            gui.isEscapeOpen = Not gui.isEscapeOpen
+            'Process.GetCurrentProcess().CloseMainWindow()
         End If
         If e.ScanCode = Key.F12 Then
             x = 0
@@ -77,50 +77,55 @@ Public Class camera
 
     Public Shared Sub update()
         If keysDown(Key.W) Then
-            moveAtX = speed
+            moveAtX = settings.speed
         Else
             moveAtX = 0
         End If
         If keysDown(Key.S) Then
-            moveAtX = -speed
+            moveAtX = -settings.speed
         ElseIf Not keysDown(Key.W) Then
             moveAtX = 0
         End If
         If keysDown(Key.A) Then
-            moveAtY = speed
+            moveAtY = settings.speed
         Else
             moveAtY = 0
         End If
         If keysDown(Key.D) Then
-            moveAtY = -speed
+            moveAtY = -settings.speed
         ElseIf Not keysDown(Key.A) Then
             moveAtY = 0
         End If
         If keysDown(Key.LShift) Then
-            y += speed
+            y += settings.speed
         End If
         If keysDown(Key.Space) Then
-            y -= speed
+            y -= settings.speed
         End If
 
         If keysDown(Key.T) Then
             world.entites(1).accelerate(0, 0.01, 0)
         End If
 
-        'Console.WriteLine(CType(moveAtX, String) + " : " + CType(moveAtY, String))
+        If Not gui.isEscapeOpen Then
+            Dim dx As Double = -(moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * Math.Cos(rai(Module1.GLTexturedCube.yaw)))
+            If enableVirtical Then
+                Dim dy As Double = (moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.pitch)))
+                y += dy
+            End If
+            Dim dz As Double = (moveAtX * Math.Cos(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * -Math.Sin(rai(Module1.GLTexturedCube.yaw)))
 
-        Dim dx As Double = -(moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * Math.Cos(rai(Module1.GLTexturedCube.yaw)))
-        If enableVirtical Then
-            Dim dy As Double = (moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.pitch)))
-            y += dy
+            x += dx
+            z += dz
         End If
-        Dim dz As Double = (moveAtX * Math.Cos(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * -Math.Sin(rai(Module1.GLTexturedCube.yaw)))
 
-        x += dx
-        z += dz
-
+        If settings.useSkybox Then
+            GL.BindTexture(TextureTarget.Texture2D, world.textures(12))
+            artist.drawMesh(polys.cubeMesh)
+            GL.BindTexture(TextureTarget.Texture2D, 0)
+        End If
         GL.Translate(x, y, z)
-
+        GL.Scale(settings.scale(0), settings.scale(1), settings.scale(2))
         dVr(4) = 0
 
     End Sub
