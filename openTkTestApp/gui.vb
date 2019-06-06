@@ -12,15 +12,14 @@ Imports System.IO
 Public Class gui
 
     Public Shared isEscapeOpen = False
+    Shared test As renderObject
 
     Public Shared Sub create()
-
+        test = New renderObject(1, 1)
     End Sub
 
     Public Shared Sub render()
-        If isEscapeOpen Then
-            drawTexture(world.textures(10), 0, 0, 64, 64)
-        End If
+        drawTexture(world.textures(6), 0, 0, 64, 64)
     End Sub
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
@@ -28,26 +27,52 @@ Public Class gui
     End Sub
 
     Public Shared Sub drawTexture(texture As Integer, x As Double, y As Double, width As Double, height As Double)
+        Dim w = Module1.app.Width
+        Dim h = Module1.app.Height
+        GL.PushMatrix()
         GL.BindTexture(TextureTarget.Texture2D, texture)
-        'GL.Translate(-camera.x, -camera.y, -camera.z)
-        GL.Translate(x, y, 0)
-        GL.Begin(PrimitiveType.Quads)
+        GL.Translate(x / w, y / h, -1)
+        GL.Rotate(90, 0, 1, 0)
+        GL.Rotate(-90, 1, 0, 0)
+        GL.Scale(width / w, height / h, 0.1)
+        artist.drawMesh(polys.face)
+        GL.Scale(1 / (width / w), 1 / (height / h), 1)
+        GL.Rotate(90, 1, 0, 0)
+        GL.Rotate(-90, 0, 1, 0)
+        GL.Translate(-x * w, -y * h, 1)
+        GL.PopMatrix()
+    End Sub
 
-        GL.TexCoord2(0, 0)
-        GL.Vertex2(0, 0)
+End Class
 
-        GL.TexCoord2(1, 0)
-        GL.Vertex2(width, 0)
+Public Class renderObject
 
-        GL.TexCoord2(1, 1)
-        GL.Vertex2(width, height)
+    Dim verts As List(Of Vector3) = New List(Of Vector3)
+    Dim textures As List(Of Vector2) = New List(Of Vector2)
+    Dim mesh As Mesh
 
-        GL.TexCoord2(0, 1)
-        GL.Vertex2(0, height)
+    Public Sub New(width As Double, height As Double)
+        verts.Add(New Vector3(0, 0, 0))
+        verts.Add(New Vector3(0, height, 0))
+        verts.Add(New Vector3(width, height, 0))
 
-        GL.End()
-        'GL.Translate(-x, -y, 0)
-        'GL.Translate(camera.x, camera.y, camera.z)
+        verts.Add(New Vector3(width, height, 0))
+        verts.Add(New Vector3(width, 0, 0))
+        verts.Add(New Vector3(0, 0, 0))
+
+        textures.Add(New Vector2(0, 0))
+        textures.Add(New Vector2(0, 1))
+        textures.Add(New Vector2(1, 1))
+
+        textures.Add(New Vector2(1, 1))
+        textures.Add(New Vector2(1, 0))
+        textures.Add(New Vector2(0, 0))
+
+        mesh = New Mesh(verts, textures, Nothing)
+    End Sub
+
+    Public Sub render(texture As Integer, x As Double, y As Double)
+        artist.drawMesh(mesh, texture, x, y, -1)
     End Sub
 
 End Class

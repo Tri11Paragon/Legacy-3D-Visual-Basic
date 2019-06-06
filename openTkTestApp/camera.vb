@@ -122,8 +122,12 @@ Public Class camera
         If settings.useSkybox Then
             GL.BindTexture(TextureTarget.Texture2D, world.textures(12))
             artist.drawMesh(polys.cubeMesh)
-            GL.BindTexture(TextureTarget.Texture2D, 0)
         End If
+
+        'If gui.isEscapeOpen Then
+
+        'End If
+
         GL.Translate(x, y, z)
         GL.Scale(settings.scale(0), settings.scale(1), settings.scale(2))
         dVr(4) = 0

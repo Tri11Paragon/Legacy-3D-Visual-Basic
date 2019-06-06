@@ -165,8 +165,8 @@ Module Module1
             MyBase.CursorVisible = camera.dVr(0)
             GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
-            gui.render()
             GL.LoadIdentity()
+            gui.render()
 
             If camera.dVr(4) And Not gui.isEscapeOpen Then
                 yaw += camera.dVr(2) * 0.5 * settings.sensitivity
