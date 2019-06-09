@@ -99,6 +99,7 @@ Module Module1
 
         Protected Overrides Sub OnLoad(ByVal e As System.EventArgs)
             MyBase.OnLoad(e)
+            settings.loadSettings()
             GL.ClearColor(0.5, 0.5, 0.6, 0)
             GL.Enable(EnableCap.DepthTest)
             GL.Enable(EnableCap.Texture2D)
@@ -181,8 +182,14 @@ Module Module1
                 pitch = -90
             End If
 
-            GL.Rotate(-pitch, 1, 0, 0)
-            GL.Rotate(-yaw, 0, 1, 0)
+            If settings.flipRotate Then
+                GL.Rotate(pitch, 1, 0, 0)
+                GL.Rotate(yaw, 0, 1, 0)
+            Else
+                GL.Rotate(-pitch, 1, 0, 0)
+                GL.Rotate(-yaw, 0, 1, 0)
+            End If
+
 
             camera.update()
 

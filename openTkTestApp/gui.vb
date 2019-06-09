@@ -19,7 +19,9 @@ Public Class gui
     End Sub
 
     Public Shared Sub render()
-        drawTexture(world.textures(6), 0, 0, 64, 64)
+        If isEscapeOpen Then
+            drawTexture(world.textures(6), 0, 0, 64, 64)
+        End If
     End Sub
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)

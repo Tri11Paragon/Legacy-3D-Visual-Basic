@@ -94,7 +94,7 @@ Public Class polys
 
         Do While cf.Peek <> -1
             Dim line As String = o_helper.fn_1293(cf.ReadLine())
-            If Not line.Equals("skip") Then
+            If Not line.Equals("%") Then
                 Dim texData As String = ""
                 Dim vertData As String = ""
                 Dim spl As String() = o_helper.removeSpaces(line.Split("|"))

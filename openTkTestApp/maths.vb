@@ -87,12 +87,12 @@ Public Class o_helper
 
         If Not String.IsNullOrEmpty(str) Then
             If str.StartsWith("//") Or str.StartsWith("'") Or str.StartsWith("#") Then
-                f = "skip"
+                f = "%"
             Else
                 f = str
             End If
         Else
-            f = "skip"
+            f = "%"
         End If
 
         Return f

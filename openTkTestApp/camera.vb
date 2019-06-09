@@ -30,10 +30,15 @@ Public Class camera
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
         gui.keyPressed(e)
+        If keysDown(Key.WinLeft) And keysDown(Key.F) And keysDown(Key.ShiftLeft) Then
+            settings.flipRotate = Not settings.flipRotate
+            Console.WriteLine("Flip camera rotation: " & settings.flipRotate)
+        End If
     End Sub
 
     Public Shared Sub keyReleased(e As KeyboardKeyEventArgs)
         keysDown(e.ScanCode) = False
+
         If e.ScanCode = 20 Then
             If dVr(0) = 0 Then
                 dVr(0) = 1
@@ -43,6 +48,7 @@ Public Class camera
             camera.ShowWindow(camera.GetConsoleWindow(), dVr(0))
 
         End If
+
         If e.ScanCode = 19 Then
             If dVr(1) = 0 Then
                 dVr(1) = 1
@@ -50,24 +56,33 @@ Public Class camera
                 dVr(1) = 0
             End If
         End If
+
         If dVr(1) And dVr(0) Then
             'Console.WriteLine(e.ScanCode)
         End If
+
         If e.ScanCode = Key.Escape Then
             Console.WriteLine("Exiting Program!")
             gui.isEscapeOpen = Not gui.isEscapeOpen
             'Process.GetCurrentProcess().CloseMainWindow()
         End If
+
         If e.ScanCode = Key.F12 Then
             x = 0
             y = 0
             z = 0
         End If
+
         If e.ScanCode = Key.F2 Then
             takePicture(Date.Now.Year & "-" & Date.Now.Month & "-" & Date.Now.Day & "-" & Date.Now.Hour & "-" & Date.Now.Minute & "-" & Date.Now.Second & "-" & Date.Now.Millisecond & ".png", ImageFormat.Png, 0, 0, Module1.app.Width, Module1.app.Height)
         End If
+
         If e.ScanCode = Key.F10 Then
             Throw New Exception("Illegal Button Press!")
+        End If
+
+        If e.ScanCode = Key.AltLeft Or e.ScanCode = Key.AltRight Or e.ScanCode = Key.WinLeft Or e.ScanCode = Key.WinRight Then
+            settings.saveSettings()
         End If
     End Sub
 
@@ -76,6 +91,7 @@ Public Class camera
     End Sub
 
     Public Shared Sub update()
+
         If keysDown(Key.W) Then
             moveAtX = settings.speed
         Else
@@ -124,9 +140,9 @@ Public Class camera
             artist.drawMesh(polys.cubeMesh)
         End If
 
-        'If gui.isEscapeOpen Then
+        If gui.isEscapeOpen Then
 
-        'End If
+        End If
 
         GL.Translate(x, y, z)
         GL.Scale(settings.scale(0), settings.scale(1), settings.scale(2))
