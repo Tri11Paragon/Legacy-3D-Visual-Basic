@@ -125,6 +125,7 @@ Module Module1
             camera.load()
 
             LoadTextures()
+            world.create()
 
             world.entites.Add(New entity(polys.pigMesh, world.textures(0), 0, 0, 5))
             world.entites.Add(New entity(polys.pigMesh, world.textures(1), 0, 5, 0))
@@ -197,10 +198,7 @@ Module Module1
 
             artist.drawMesh(polys.mouseMesh, world.textures(11), 10, 10, 0)
 
-            For Each d As entity In world.entites
-                d.update()
-                d.draw()
-            Next
+            world.update()
 
             SwapBuffers()
         End Sub

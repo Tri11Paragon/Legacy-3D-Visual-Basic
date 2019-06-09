@@ -15,15 +15,17 @@ Public Class settings
     Public Shared speed As Double = 0.2
     Public Shared sensitivity = 0.75
 
+    ' loads settings from file
     Public Shared Sub loadSettings()
         Dim FS As New FileStream("data/settings.dat", FileMode.Open, FileAccess.Read)
         Dim cf As New StreamReader(FS)
 
+        'read the file
         Do While cf.Peek <> -1
             Dim line As String = o_helper.fn_1293(cf.ReadLine())
-            If Not line.Equals("%") Then
-                Dim s = line.Split(":")
-                If s(0).StartsWith("useSkybox") Then
+            If Not line.Equals("%") Then ' remove comments
+                Dim s = line.Split(":") ' split at :
+                If s(0).StartsWith("useSkybox") Then ' following stuff just loads settings
                     useSkybox = Boolean.Parse(s(1))
                 End If
                 If s(0).StartsWith("flipRotate") Then
@@ -48,10 +50,12 @@ Public Class settings
         FS.Close()
     End Sub
 
+    ' saves the settings
     Public Shared Sub saveSettings()
         Dim FS As New FileStream("data/settings.dat", FileMode.Create, FileAccess.ReadWrite)
         Dim cf As New StreamWriter(FS)
 
+        'adds to file
         cf.WriteLine("useSkybox:" & useSkybox)
         cf.WriteLine("flipRotate:" & flipRotate)
         cf.WriteLine("scale:" & scale(0) & " " & scale(1) & " " & scale(2))
