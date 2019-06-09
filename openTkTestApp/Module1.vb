@@ -83,6 +83,9 @@ Module Module1
             LoadTexture(world.textures(10), "ab4pjx3bnww21.jpg")
             LoadTexture(world.textures(11), "pig.png")
             LoadTexture(world.textures(12), "skybox/cube.png")
+            LoadTexture(world.textures(13), "grass.png")
+            LoadTexture(world.textures(14), "tree.png")
+            LoadTexture(world.textures(15), "white.png")
             LoadTexture(world.textures(100), "skybox/back.png")
             LoadTexture(world.textures(101), "skybox/bottom.png")
             LoadTexture(world.textures(102), "skybox/front.png")
@@ -126,22 +129,13 @@ Module Module1
 
             LoadTextures()
             world.create()
-
-            world.entites.Add(New entity(polys.pigMesh, world.textures(0), 0, 0, 5))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(1), 0, 5, 0))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(2), 0, 0, 0))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(3), 0, 0, -5))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(4), 5, 5, 0))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(5), 5, 5, 0))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(6), 5, 5, -5))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(7), 5, 0, 0))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(8), 5, -5, 0))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(9), -5, -5, 5))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(10), 5, -5, 5))
-            world.entites.Add(New entity(polys.pigMesh, world.textures(11), 5, -5, 5))
-
             gui.create()
 
+        End Sub
+
+        Protected Overrides Sub Dispose(manual As Boolean)
+            MyBase.Dispose(manual)
+            gui.unload()
         End Sub
 
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)

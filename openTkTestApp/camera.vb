@@ -25,7 +25,7 @@ Public Class camera
     Public Shared enableVirtical As Boolean = False
 
     Public Shared Sub load()
-
+        y = -5
     End Sub
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
@@ -91,7 +91,6 @@ Public Class camera
     End Sub
 
     Public Shared Sub update()
-
         If keysDown(Key.W) Then
             moveAtX = settings.speed
         Else
@@ -113,10 +112,10 @@ Public Class camera
             moveAtY = 0
         End If
         If keysDown(Key.LShift) Then
-            y += settings.speed
+            camera.y += settings.speed
         End If
         If keysDown(Key.Space) Then
-            y -= settings.speed
+            camera.y -= settings.speed
         End If
 
         If keysDown(Key.T) Then
@@ -127,12 +126,12 @@ Public Class camera
             Dim dx As Double = -(moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * Math.Cos(rai(Module1.GLTexturedCube.yaw)))
             If enableVirtical Then
                 Dim dy As Double = (moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.pitch)))
-                y += dy
+                camera.y += dy
             End If
             Dim dz As Double = (moveAtX * Math.Cos(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * -Math.Sin(rai(Module1.GLTexturedCube.yaw)))
 
-            x += dx
-            z += dz
+            camera.x += dx
+            camera.z += dz
         End If
 
         If settings.useSkybox Then
@@ -140,11 +139,11 @@ Public Class camera
             artist.drawMesh(polys.cubeMesh)
         End If
 
-        If gui.isEscapeOpen Then
-
+        If camera.y >= -0.1 Then
+            camera.y = -0.1
         End If
 
-        GL.Translate(x, y, z)
+        GL.Translate(camera.x, camera.y, camera.z)
         GL.Scale(settings.scale(0), settings.scale(1), settings.scale(2))
         dVr(4) = 0
 

@@ -11,17 +11,45 @@ Imports System.IO
 
 Public Class gui
 
+    Private Shared renderer As TextRenderer
+    Private Shared serif As Font = New Font(FontFamily.GenericSerif, 24)
+    Private Shared sans As Font = New Font(FontFamily.GenericSansSerif, 24)
+    Private Shared mono As Font = New Font(FontFamily.GenericMonospace, 24)
+
     Public Shared isEscapeOpen = False
     Shared test As renderObject
 
     Public Shared Sub create()
         test = New renderObject(1, 1)
+        renderer = New TextRenderer(Module1.app.Width, Module1.app.Height)
+        renderer.DrawString("Hello There!", mono, Brushes.Black, New PointF(0, 0))
     End Sub
 
     Public Shared Sub render()
         If isEscapeOpen Then
             drawTexture(world.textures(6), 0, 0, 64, 64)
         End If
+        GL.Enable(EnableCap.Texture2D)
+        GL.BindTexture(TextureTarget.Texture2D, renderer.texture)
+        GL.Begin(BeginMode.Quads)
+
+        GL.TexCoord2(0.0F, 1.0F)
+        GL.Vertex2(-1.0F, -1.0F)
+
+        GL.TexCoord2(1.0F, 1.0F)
+        GL.Vertex2(1.0F, -1.0F)
+
+        GL.TexCoord2(1.0F, 0.0F)
+        GL.Vertex2(1.0F, 1.0F)
+
+        GL.TexCoord2(0.0F, 0.0F)
+        GL.Vertex2(-1.0F, 1.0F)
+
+        GL.End()
+    End Sub
+
+    Public Shared Sub unload()
+        renderer.Dispose()
     End Sub
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)

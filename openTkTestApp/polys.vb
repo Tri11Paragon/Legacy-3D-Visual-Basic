@@ -14,14 +14,18 @@ Public Class polys
     Public Shared cubeMesh As Mesh
     Public Shared face As Mesh
     Public Shared face90 As Mesh
+    Public Shared tree As Mesh
+    Public Shared tree1 As Mesh
 
     Public Shared Sub loadPolys()
         mouseMesh = BLoad("primitives/bever.obj")
         pigMesh = BLoad("primitives/pig.obj")
-        terrainMesh = BLoad("primitives/terrain1.obj")
+        terrainMesh = BLoad("primitives/terrain2.obj")
         cubeMesh = BLoad("primitives/cube.obj")
         face = BLoad("primitives/face.obj")
         face90 = BLoad("primitives/face.obj")
+        tree = BLoad("primitives/tree.obj")
+        tree1 = BLoad("primitives/tree1.obj")
     End Sub
 
     ' this is credited to https://github.com/dabbertorres/ObjRenderer

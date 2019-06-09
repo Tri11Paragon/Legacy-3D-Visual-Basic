@@ -49,6 +49,76 @@ Public Class artist
     End Sub
 End Class
 
+' took this from https://github.com/mono/opentk/blob/master/Source/Examples/OpenGL/1.x/TextRendering.cs
+Public Class TextRenderer
+    'Inherits IDisposable
+
+    Private bmp As Bitmap
+    Private gfx As Graphics
+    Public texture As Integer
+    Private dirty_region As Rectangle
+    Private disposed As Boolean
+
+    Public Sub New(ByVal width As Integer, ByVal height As Integer)
+        If width <= 0 Then Throw New ArgumentOutOfRangeException("width")
+        If height <= 0 Then Throw New ArgumentOutOfRangeException("height ")
+        If GraphicsContext.CurrentContext Is Nothing Then Throw New InvalidOperationException("No GraphicsContext is current on the calling thread.")
+        bmp = New Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+        gfx = Graphics.FromImage(bmp)
+        gfx.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias
+        texture = GL.GenTexture()
+        GL.BindTexture(TextureTarget.Texture2D, texture)
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, CInt(TextureMinFilter.Linear))
+        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, CInt(TextureMagFilter.Linear))
+        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, width, height, 0, OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, IntPtr.Zero)
+    End Sub
+
+    Public Sub Clear(ByVal color As Color)
+        gfx.Clear(color)
+        dirty_region = New Rectangle(0, 0, bmp.Width, bmp.Height)
+    End Sub
+
+    Public Sub DrawString(ByVal text As String, ByVal font As Font, ByVal brush As Brush, ByVal point As PointF)
+        gfx.DrawString(text, font, brush, point)
+        Dim size As SizeF = gfx.MeasureString(text, font)
+        dirty_region = Rectangle.Round(RectangleF.Union(dirty_region, New RectangleF(point, size)))
+        dirty_region = Rectangle.Intersect(dirty_region, New Rectangle(0, 0, bmp.Width, bmp.Height))
+    End Sub
+
+    Private Sub UploadBitmap()
+        If dirty_region <> RectangleF.Empty Then
+            Dim data As System.Drawing.Imaging.BitmapData = bmp.LockBits(dirty_region, System.Drawing.Imaging.ImageLockMode.[ReadOnly], System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+            GL.BindTexture(TextureTarget.Texture2D, texture)
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, dirty_region.X, dirty_region.Y, dirty_region.Width, dirty_region.Height, OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0)
+            bmp.UnlockBits(data)
+            dirty_region = Rectangle.Empty
+        End If
+    End Sub
+
+    Private Sub Dispose(ByVal manual As Boolean)
+        If Not disposed Then
+
+            If manual Then
+                bmp.Dispose()
+                gfx.Dispose()
+                If GraphicsContext.CurrentContext IsNot Nothing Then GL.DeleteTexture(texture)
+            End If
+
+            disposed = True
+        End If
+    End Sub
+
+    Public Sub Dispose()
+        Dispose(True)
+        GC.SuppressFinalize(Me)
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        Console.WriteLine("[Warning] Resource leaked: {0}.", GetType(TextRenderer))
+    End Sub
+End Class
+
+
 Public Class touple(Of X, Y)
 
     Private _x As X
