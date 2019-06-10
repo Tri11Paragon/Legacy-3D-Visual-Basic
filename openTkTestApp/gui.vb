@@ -11,7 +11,7 @@ Imports System.IO
 
 Public Class gui
 
-    Private Shared renderer As TextRenderer
+    Public Shared renderer As TextRenderer
     Private Shared serif As Font = New Font(FontFamily.GenericSerif, 24)
     Private Shared sans As Font = New Font(FontFamily.GenericSansSerif, 24)
     Private Shared mono As Font = New Font(FontFamily.GenericMonospace, 24)
@@ -29,23 +29,6 @@ Public Class gui
         If isEscapeOpen Then
             drawTexture(world.textures(6), 0, 0, 64, 64)
         End If
-        GL.Enable(EnableCap.Texture2D)
-        GL.BindTexture(TextureTarget.Texture2D, renderer.texture)
-        GL.Begin(BeginMode.Quads)
-
-        GL.TexCoord2(0.0F, 1.0F)
-        GL.Vertex2(-1.0F, -1.0F)
-
-        GL.TexCoord2(1.0F, 1.0F)
-        GL.Vertex2(1.0F, -1.0F)
-
-        GL.TexCoord2(1.0F, 0.0F)
-        GL.Vertex2(1.0F, 1.0F)
-
-        GL.TexCoord2(0.0F, 0.0F)
-        GL.Vertex2(-1.0F, 1.0F)
-
-        GL.End()
     End Sub
 
     Public Shared Sub unload()

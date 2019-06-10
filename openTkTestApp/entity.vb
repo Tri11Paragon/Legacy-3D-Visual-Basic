@@ -46,6 +46,16 @@ Public Class entity
         velocity += vel
     End Sub
 
+    Public Sub birth(e As entity)
+
+    End Sub
+
+    Public Sub death()
+        If ((20 - 1) * Rnd()) = 1 Then
+
+        End If
+    End Sub
+
     Public Sub accelerate(x As Double, y As Double, z As Double)
         velocity.X += x
         velocity.Y += y
