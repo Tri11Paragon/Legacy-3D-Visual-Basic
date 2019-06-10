@@ -30,9 +30,16 @@ Public Class camera
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
         gui.keyPressed(e)
-        If keysDown(Key.WinLeft) And keysDown(Key.F) And keysDown(Key.ShiftLeft) Then
+        If isSpecialUsr() And keysDown(Key.F) Then
             settings.flipRotate = Not settings.flipRotate
             Console.WriteLine("Flip camera rotation: " & settings.flipRotate)
+        End If
+        If isSpecialUsr() And keysDown(Key.S) And keysDown(Key.Plus) Then
+            settings.speed += 0.1D
+            Console.WriteLine("Speed is now: " & settings.speed)
+        End If
+        If isSpecialUsr() And keysDown(Key.S) And keysDown(Key.Minus) Then
+            Console.WriteLine("Speed is now: " & settings.speed)
         End If
     End Sub
 
@@ -69,7 +76,7 @@ Public Class camera
 
         If e.ScanCode = Key.F12 Then
             x = 0
-            y = 0
+            y = -1
             z = 0
         End If
 
@@ -118,10 +125,6 @@ Public Class camera
             camera.y -= settings.speed
         End If
 
-        If keysDown(Key.T) Then
-            world.entites(1).accelerate(0, 0.01, 0)
-        End If
-
         If Not gui.isEscapeOpen Then
             Dim dx As Double = -(moveAtX * -Math.Sin(rai(Module1.GLTexturedCube.yaw))) + (moveAtY * Math.Cos(rai(Module1.GLTexturedCube.yaw)))
             If enableVirtical Then
@@ -149,6 +152,7 @@ Public Class camera
 
     End Sub
 
+    ' convert to raidians
     Public Shared Function rai(degrees As Double) As Double
         Return degrees * Math.PI / 180
     End Function
@@ -165,14 +169,10 @@ Public Class camera
         dVr(2) = e.XDelta
         dVr(3) = e.YDelta
 
-        'Console.WriteLine(CType(e.XDelta, String) + " : " + CType(e.YDelta, String))
-
-        If (dVr(0) <> 1) Then
+        If gui.isEscapeOpen <> True Then
             SetCursorPos(DisplayDevice.Default.Width / 2, DisplayDevice.Default.Height / 2)
         End If
         dVr(4) = 1
-
-        'dir(New Vector3(0, dVr(3), dVr(2)), 30)
     End Sub
 
     Public Shared Sub takePicture(file As String, format As ImageFormat, x As Integer, y As Integer, w As Integer, h As Integer)
@@ -196,5 +196,49 @@ Public Class camera
     Public Shared Sub mouseWheel(e As MouseWheelEventArgs)
 
     End Sub
+
+    ' used to check if running a user command
+    Public Shared Function isUsrDwn() As Boolean
+        Dim [return] As Boolean = False
+
+        If keysDown(Key.WinLeft) Then
+            [return] = True
+        End If
+
+        Return [return]
+    End Function
+
+    ' used to check if running a special user command. (Usually used to change player settings)
+    Public Shared Function isSpecialUsr() As Boolean
+        Dim [return] As Boolean = False
+
+        If keysDown(Key.WinLeft) And keysDown(Key.LShift) Then
+            [return] = True
+        End If
+
+        Return [return]
+    End Function
+
+    ' used to check if mod is down(entity key)
+    Public Shared Function isEntDwn() As Boolean
+        Dim [return] As Boolean = False
+
+        If keysDown(Key.AltLeft) Then
+            [return] = True
+        End If
+
+        Return [return]
+    End Function
+
+    ' used to check if a special mod is down(special entity function key)
+    Public Shared Function isSpecialEnt() As Boolean
+        Dim [return] As Boolean = False
+
+        If keysDown(Key.AltLeft) And keysDown(Key.LShift) Then
+            [return] = True
+        End If
+
+        Return [return]
+    End Function
 
 End Class

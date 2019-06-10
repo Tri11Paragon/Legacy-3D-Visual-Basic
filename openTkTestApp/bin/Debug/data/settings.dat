@@ -1,5 +1,5 @@
 useSkybox:True
 flipRotate:False
 scale:1 1 1
-speed:0.2
+speed:1.5
 sensitivity:0.75

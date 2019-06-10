@@ -86,18 +86,6 @@ Module Module1
             LoadTexture(world.textures(13), "grass.png")
             LoadTexture(world.textures(14), "tree.png")
             LoadTexture(world.textures(15), "white.png")
-            LoadTexture(world.textures(100), "skybox/back.png")
-            LoadTexture(world.textures(101), "skybox/bottom.png")
-            LoadTexture(world.textures(102), "skybox/front.png")
-            LoadTexture(world.textures(103), "skybox/left.png")
-            LoadTexture(world.textures(104), "skybox/right.png")
-            LoadTexture(world.textures(105), "skybox/top.png")
-            LoadTexture(world.textures(106), "skybox/nightBack.png")
-            LoadTexture(world.textures(107), "skybox/nightBottom.png")
-            LoadTexture(world.textures(108), "skybox/nightFront.png")
-            LoadTexture(world.textures(109), "skybox/nightLeft.png")
-            LoadTexture(world.textures(110), "skybox/nightRight.png")
-            LoadTexture(world.textures(111), "skybox/nightTop.png")
         End Sub
 
         Protected Overrides Sub OnLoad(ByVal e As System.EventArgs)
@@ -158,7 +146,11 @@ Module Module1
 
         Protected Overrides Sub OnRenderFrame(ByVal e As OpenTK.FrameEventArgs)
             MyBase.OnRenderFrame(e)
-            MyBase.CursorVisible = camera.dVr(0)
+            If gui.isEscapeOpen <> True Then
+                MyBase.CursorVisible = False
+            Else
+                MyBase.CursorVisible = True
+            End If
             GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
             GL.LoadIdentity()
@@ -170,11 +162,11 @@ Module Module1
             End If
 
             If (-pitch > 90) Then
-                pitch = 90
+                pitch = -90
             End If
 
             If (-pitch < -90) Then
-                pitch = -90
+                pitch = 90
             End If
 
             If settings.flipRotate Then

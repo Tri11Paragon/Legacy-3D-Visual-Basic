@@ -22,12 +22,12 @@ Public Class gui
     Public Shared Sub create()
         test = New renderObject(1, 1)
         renderer = New TextRenderer(Module1.app.Width, Module1.app.Height)
-        renderer.DrawString("Hello There!", mono, Brushes.Black, New PointF(0, 0))
+        renderer.DrawString("Hello There!", sans, Brushes.Black, New PointF(0, 0))
     End Sub
 
     Public Shared Sub render()
         If isEscapeOpen Then
-            drawTexture(world.textures(6), 0, 0, 64, 64)
+            drawTexture(renderer.texture, 0, 0, 64, 64)
         End If
     End Sub
 
