@@ -20,10 +20,8 @@ Module Module1
     Public Class GLTexturedCube
         Inherits GameWindow
 
-        Protected angle As Single
-
         Public Sub New()
-            MyBase.New(1200, 800, New GraphicsMode(New ColorFormat(24, 24, 24, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 1, 1, GraphicsContextFlags.ForwardCompatible)
+            MyBase.New(800, 600, New GraphicsMode(New ColorFormat(24, 24, 24, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
 
         End Sub
 
@@ -31,9 +29,7 @@ Module Module1
             'Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + 
             Dim bmp As New Bitmap("textures/" + filename)
 
-            Dim data As BitmapData = bmp.LockBits(New Rectangle(0, 0, bmp.Width, bmp.Height),
-                                                System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                                                System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+            Dim data As BitmapData = bmp.LockBits(New Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
 
             GL.BindTexture(TextureTarget.Texture2D, textureId)
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0)
@@ -41,28 +37,6 @@ Module Module1
             bmp.UnlockBits(data)
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureMinFilter.Linear)
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureMagFilter.Linear)
-        End Sub
-
-        Protected Sub LoadTexture(ByVal textureId As Integer, ByVal filename As String, cubemap As Integer)
-            'Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + 
-            Dim bmp As New Bitmap("textures/" + filename)
-
-            Dim data As BitmapData = bmp.LockBits(New Rectangle(0, 0, bmp.Width, bmp.Height),
-                                            System.Drawing.Imaging.ImageLockMode.ReadOnly,
-                                            System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-
-            GL.BindTexture(TextureTarget.Texture2D, textureId)
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
-                  bmp.Width, bmp.Height, 0, OpenGL.PixelFormat.Bgra,
-                  PixelType.UnsignedByte, data.Scan0)
-
-            bmp.UnlockBits(data)
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMinFilter, TextureMinFilter.Linear)
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureMagFilter, TextureMagFilter.Linear)
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, TextureWrapMode.ClampToEdge)
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, TextureWrapMode.ClampToEdge)
-            GL.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, TextureWrapMode.ClampToEdge)
-
         End Sub
 
         Protected Sub LoadTextures()
@@ -117,12 +91,15 @@ Module Module1
             world.create()
             gui.create()
 
+
+            world.entites.Add(New entity(polys.pigMesh, world.textures(0), 0, 5, 0))
         End Sub
 
-        Protected Overrides Sub Dispose(manual As Boolean)
+        Protected Overrides Sub OnDisposed(e As EventArgs)
+            world.saveEntities()
             gui.unload()
             settings.saveSettings()
-            MyBase.Dispose(manual)
+            MyBase.OnDisposed(e)
         End Sub
 
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
@@ -145,11 +122,7 @@ Module Module1
 
         Protected Overrides Sub OnRenderFrame(ByVal e As OpenTK.FrameEventArgs)
             MyBase.OnRenderFrame(e)
-            If gui.isEscapeOpen <> True Then
-                MyBase.CursorVisible = False
-            Else
-                MyBase.CursorVisible = True
-            End If
+            MyBase.CursorVisible = gui.isEscapeOpen
             GL.Clear(ClearBufferMask.ColorBufferBit Or ClearBufferMask.DepthBufferBit)
 
             GL.LoadIdentity()
@@ -173,10 +146,6 @@ Module Module1
 
 
             camera.update()
-
-            angle += 1.5
-
-            artist.drawMesh(polys.mouseMesh, world.textures(11), 10, 10, 0)
 
             world.update()
 

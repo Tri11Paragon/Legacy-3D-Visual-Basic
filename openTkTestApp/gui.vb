@@ -81,7 +81,7 @@ Public Class renderObject
         textures.Add(New Vector2(1, 0))
         textures.Add(New Vector2(0, 0))
 
-        mesh = New Mesh(verts, textures, Nothing)
+        mesh = New Mesh("ERROR YOU SOULD NOT USE THIS IN ENTITIES", verts, textures, Nothing)
     End Sub
 
     Public Sub render(texture As Integer, x As Double, y As Double)

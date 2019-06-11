@@ -4,6 +4,7 @@ Imports OpenTK.Graphics.OpenGL
 Imports System.Drawing
 Imports System.Drawing.Imaging
 Imports System.IO
+Imports System.IO.Path
 Imports OpenTK.Input
 
 Public Class polys
@@ -20,7 +21,7 @@ Public Class polys
     Public Shared Sub loadPolys()
         mouseMesh = BLoad("primitives/bever.obj")
         pigMesh = BLoad("primitives/pig.obj")
-        terrainMesh = BLoad("primitives/terrain1.obj")
+        terrainMesh = BLoad("primitives/terrain2.obj")
         cubeMesh = BLoad("primitives/cube.obj")
         face = BLoad("primitives/face.obj")
         face90 = BLoad("primitives/face.obj")
@@ -43,13 +44,15 @@ Public Class polys
         Dim textureVertices As List(Of Vector2) = New List(Of Vector2)()
         Dim norms As List(Of Vector3) = New List(Of Vector3)
         Dim normals As List(Of Vector3) = New List(Of Vector3)()
+        Dim name As String = ""
 
         If Not File.Exists(path) Then
             Throw New FileNotFoundException("Unable to open " & path & ", does not exist.")
         End If
 
-        Using streamReader As StreamReader = New StreamReader(path)
+        name = System.IO.Path.GetFileName(path)
 
+        Using streamReader As StreamReader = New StreamReader(path)
             While Not streamReader.EndOfStream
                 Dim words As List(Of String) = New List(Of String)(streamReader.ReadLine().ToLower().Split(" "))
                 words.RemoveAll(Function(s) s = String.Empty)
@@ -82,7 +85,7 @@ Public Class polys
             End While
         End Using
 
-        Return New Mesh(vertices, textureVertices, normals)
+        Return New Mesh(name, vertices, textureVertices, normals)
     End Function
 
     ' useless function
@@ -130,10 +133,12 @@ Public Class Mesh
     Public ReadOnly vertices As List(Of Vector3)
     Public ReadOnly textureVertices As List(Of Vector2)
     Public ReadOnly normals As List(Of Vector3)
+    Public ReadOnly name As String = ""
 
-    Public Sub New(ByVal vertices As List(Of Vector3), ByVal textureVertices As List(Of Vector2), ByVal normals As List(Of Vector3))
+    Public Sub New(name As String, ByVal vertices As List(Of Vector3), ByVal textureVertices As List(Of Vector2), ByVal normals As List(Of Vector3))
         Me.vertices = vertices
         Me.textureVertices = textureVertices
         Me.normals = normals
+        Me.name = name
     End Sub
 End Class

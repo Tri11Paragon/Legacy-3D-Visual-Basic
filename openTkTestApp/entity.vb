@@ -11,6 +11,7 @@ Public Class entity
     Private x As Double
     Private y As Double
     Private z As Double
+    Private r As Double ' rotation
     Private texture As Integer
     Private velocity As Vector3
     Private mesh As Mesh
@@ -90,6 +91,14 @@ Public Class entity
 
     Public Function getVelocity() As Vector3
         Return Me.velocity
+    End Function
+
+    Public Function getRotation() As Double
+        Return Me.r
+    End Function
+
+    Public Function getMesh() As Mesh
+        Return Me.mesh
     End Function
 
 End Class

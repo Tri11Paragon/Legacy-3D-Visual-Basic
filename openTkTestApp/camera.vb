@@ -43,7 +43,11 @@ Public Class camera
             Console.WriteLine("Speed is now: " & settings.speed)
         End If
         If isSpecialUsr() And keysDown(Key.S) And keysDown(Key.Minus) Then
+            settings.speed -= 0.1D
             Console.WriteLine("Speed is now: " & settings.speed)
+        End If
+        If isUsrDwn() And keysDown(Key.S) Then
+            world.saveEntities()
         End If
     End Sub
 
