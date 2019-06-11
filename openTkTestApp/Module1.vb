@@ -23,7 +23,7 @@ Module Module1
         Protected angle As Single
 
         Public Sub New()
-            MyBase.New(800, 600, New GraphicsMode(New ColorFormat(8, 8, 8, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 4, 0, GraphicsContextFlags.ForwardCompatible)
+            MyBase.New(1200, 800, New GraphicsMode(New ColorFormat(24, 24, 24, 0), 24, 8, 4), "RMS", GameWindowFlags.FixedWindow, DisplayDevice.Default, 1, 1, GraphicsContextFlags.ForwardCompatible)
 
         End Sub
 
@@ -36,9 +36,7 @@ Module Module1
                                                 System.Drawing.Imaging.PixelFormat.Format32bppArgb)
 
             GL.BindTexture(TextureTarget.Texture2D, textureId)
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
-                      bmp.Width, bmp.Height, 0, OpenGL.PixelFormat.Bgra,
-                      PixelType.UnsignedByte, data.Scan0)
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmp.Width, bmp.Height, 0, OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, data.Scan0)
 
             bmp.UnlockBits(data)
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureMinFilter.Linear)
@@ -122,8 +120,9 @@ Module Module1
         End Sub
 
         Protected Overrides Sub Dispose(manual As Boolean)
-            MyBase.Dispose(manual)
             gui.unload()
+            settings.saveSettings()
+            MyBase.Dispose(manual)
         End Sub
 
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
@@ -157,8 +156,8 @@ Module Module1
             gui.render()
 
             If camera.dVr(4) And Not gui.isEscapeOpen Then
-                yaw += camera.dVr(2) * 0.5 * settings.sensitivity
-                pitch += camera.dVr(3) * 0.3 * settings.sensitivity
+                yaw += camera.dVr(2) * 0.5 * settings.sensitivity * settings.flipRotate
+                pitch += camera.dVr(3) * 0.3 * settings.sensitivity * settings.flipRotate
             End If
 
             If (-pitch > 90) Then
@@ -169,13 +168,8 @@ Module Module1
                 pitch = 90
             End If
 
-            If settings.flipRotate Then
-                GL.Rotate(pitch, 1, 0, 0)
-                GL.Rotate(yaw, 0, 1, 0)
-            Else
-                GL.Rotate(-pitch, 1, 0, 0)
-                GL.Rotate(-yaw, 0, 1, 0)
-            End If
+            GL.Rotate(-pitch, 1, 0, 0)
+            GL.Rotate(-yaw, 0, 1, 0)
 
 
             camera.update()

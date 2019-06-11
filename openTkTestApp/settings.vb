@@ -10,7 +10,7 @@ Imports OpenTK.Input
 Public Class settings
 
     Public Shared useSkybox As Boolean = True
-    Public Shared flipRotate As Boolean = False
+    Public Shared flipRotate As Integer = 1
     Public Shared scale As Double() = {1.0, 1.0, 1.0}
     Public Shared speed As Double = 0.2
     Public Shared sensitivity = 0.75
@@ -29,7 +29,7 @@ Public Class settings
                     useSkybox = Boolean.Parse(s(1))
                 End If
                 If s(0).StartsWith("flipRotate") Then
-                    flipRotate = Boolean.Parse(s(1))
+                    flipRotate = Integer.Parse(s(1))
                 End If
                 If s(0).StartsWith("scale") Then
                     Dim e = s(1).Split(" ")

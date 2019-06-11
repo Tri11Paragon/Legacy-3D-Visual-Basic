@@ -31,7 +31,11 @@ Public Class camera
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
         gui.keyPressed(e)
         If isSpecialUsr() And keysDown(Key.F) Then
-            settings.flipRotate = Not settings.flipRotate
+            If settings.flipRotate = 1 Then
+                settings.flipRotate = -1
+            Else
+                settings.flipRotate = 1
+            End If
             Console.WriteLine("Flip camera rotation: " & settings.flipRotate)
         End If
         If isSpecialUsr() And keysDown(Key.S) And keysDown(Key.Plus) Then
@@ -98,31 +102,33 @@ Public Class camera
     End Sub
 
     Public Shared Sub update()
-        If keysDown(Key.W) Then
-            moveAtX = settings.speed
-        Else
-            moveAtX = 0
-        End If
-        If keysDown(Key.S) Then
-            moveAtX = -settings.speed
-        ElseIf Not keysDown(Key.W) Then
-            moveAtX = 0
-        End If
-        If keysDown(Key.A) Then
-            moveAtY = settings.speed
-        Else
-            moveAtY = 0
-        End If
-        If keysDown(Key.D) Then
-            moveAtY = -settings.speed
-        ElseIf Not keysDown(Key.A) Then
-            moveAtY = 0
-        End If
-        If keysDown(Key.LShift) Then
-            camera.y += settings.speed
-        End If
-        If keysDown(Key.Space) Then
-            camera.y -= settings.speed
+        If Not isUsrDwn() Then
+            If keysDown(Key.W) Then
+                moveAtX = settings.speed
+            Else
+                moveAtX = 0
+            End If
+            If keysDown(Key.S) Then
+                moveAtX = -settings.speed
+            ElseIf Not keysDown(Key.W) Then
+                moveAtX = 0
+            End If
+            If keysDown(Key.A) Then
+                moveAtY = settings.speed
+            Else
+                moveAtY = 0
+            End If
+            If keysDown(Key.D) Then
+                moveAtY = -settings.speed
+            ElseIf Not keysDown(Key.A) Then
+                moveAtY = 0
+            End If
+            If keysDown(Key.LShift) Then
+                camera.y += settings.speed
+            End If
+            If keysDown(Key.Space) Then
+                camera.y -= settings.speed
+            End If
         End If
 
         If Not gui.isEscapeOpen Then

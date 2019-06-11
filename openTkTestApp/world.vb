@@ -6,6 +6,7 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 Imports System.Media
+Imports System.Threading
 
 Public Class world
 
@@ -33,11 +34,11 @@ Public Class world
             d.draw()
         Next
         GL.BindTexture(TextureTarget.Texture2D, 0)
-        If (20 - 1) * Rnd() = 1 Then
-            soundPlayer.SoundLocation = musics(((musics.Count - 1) - 1) * Rnd())
-            soundPlayer.Load()
-            soundPlayer.Play()
-        End If
+        'If (20 - 1) * Rnd() = 1 Then
+        'soundPlayer.SoundLocation = musics(((musics.Count - 1) - 1) * Rnd())
+        'soundPlayer.Load()
+        'soundPlayer.Play()
+        'End If
     End Sub
 
     'loops through the array of vertices and checks to see if any vertex is closest and that must be the height
@@ -54,12 +55,28 @@ Public Class world
         Return h
     End Function
 
+    ' sound player stuff came from https://docs.microsoft.com/en-us/dotnet/api/system.media.soundplayer?view=netframework-4.8
     Public Shared Sub loadMusic() ' https://stackoverflow.com/questions/31814130/play-sounds-in-a-visual-studio-application
-        soundPlayer = New SoundPlayer()
         For Each file As String In My.Computer.FileSystem.GetFiles("music/")
             musics.Add(file)
             Console.WriteLine("Music found: " & file)
         Next
+        Dim thread As Thread = New Thread(AddressOf playMusic)
+        thread.IsBackground = True
+        thread.Start()
+        'My.Computer.Audio.Play(musics(0), AudioPlayMode.WaitToComplete)
     End Sub
+
+    ' plays music
+    Public Shared Sub playMusic()
+        Randomize()
+        Do
+            Dim msc = musics(CType(((musics.Count - 1) - 1) * Rnd(), Integer))
+            Console.WriteLine("Now playing: " & msc)
+            My.Computer.Audio.Play(msc, AudioPlayMode.WaitToComplete)
+            Thread.Sleep(1000)
+        Loop
+    End Sub
+
 
 End Class
