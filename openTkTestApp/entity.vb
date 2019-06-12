@@ -13,8 +13,12 @@ Public Class entity
     Private z As Double
     Private r As Double ' rotation
     Private texture As Integer
-    Private velocity As Vector3
+    Private velocity As Vector3d
     Private mesh As Mesh
+    Private acceleration As Vector3d
+
+    ' start time
+    Dim start = 0
 
     Public Sub New(ByRef mesh As Mesh, ByRef texture As Integer, x As Double, y As Double, z As Double)
         Me.x = x
@@ -22,10 +26,15 @@ Public Class entity
         Me.z = z
         Me.texture = texture
         Me.mesh = mesh
+        start = TimeOfDay.Millisecond
     End Sub
 
     Public Function isMoving() As Boolean
         Return If(velocity.X > 0, True, False) Or If(velocity.Y > 0, True, False) Or If(velocity.Z > 0, True, False)
+    End Function
+
+    Public Function isAccelerating() As Boolean
+        Return If(acceleration.X > 0, True, False) Or If(acceleration.Y > 0, True, False) Or If(acceleration.Z > 0, True, False)
     End Function
 
     Public Sub update()
@@ -34,17 +43,12 @@ Public Class entity
             y += velocity.Y
             z += velocity.Z
         End If
-    End Sub
-
-    Public Sub draw()
-        'Dim d As Vector3 = maths.distance(-camera.x, camera.y, -camera.z, Me.x, Me.y, Me.z)
-        'If (d.X < 40 And d.Z < 40) And d.Y < 40 Then
-        artist.drawMesh(mesh, texture, x, y, z)
+        'If start + 1000 < TimeOfDay.Millisecond Then
+        If isAccelerating() Then
+            velocity += (acceleration * clock.Delta())
+            'Console.WriteLine(clock.Delta())
+        End If
         'End If
-    End Sub
-
-    Public Sub accelerate(vel As Vector3)
-        velocity += vel
     End Sub
 
     Public Sub birth(e As entity)
@@ -57,13 +61,41 @@ Public Class entity
         End If
     End Sub
 
+    Public Sub draw()
+        'Dim d As Vector3 = maths.distance(-camera.x, camera.y, -camera.z, Me.x, Me.y, Me.z)
+        'If (d.X < 40 And d.Z < 40) And d.Y < 40 Then
+        artist.drawMesh(mesh, texture, x, y, z)
+        'End If
+    End Sub
+
+    '
+    ' THE FOLLOW SUBS ARE JUST GETTERS / SETERS
+    ' They get information / set information about the entity
+
+    Public Sub accelerate(vel As Vector3d)
+        velocity += vel
+    End Sub
     Public Sub accelerate(x As Double, y As Double, z As Double)
         velocity.X += x
         velocity.Y += y
         velocity.Z += z
     End Sub
 
-    Public Sub setVelocity(vel As Vector3)
+    Public Sub setAcceleration(a As Vector3d)
+        acceleration = a
+    End Sub
+
+    Public Sub setAcceleration(x As Double, y As Double, z As Double)
+        acceleration.X += x
+        acceleration.Y += y
+        acceleration.Z += z
+    End Sub
+
+    Public Function getAcceleration() As Vector3d
+        Return acceleration
+    End Function
+
+    Public Sub setVelocity(vel As Vector3d)
         velocity = vel
     End Sub
 
@@ -71,6 +103,10 @@ Public Class entity
         velocity.X = x
         velocity.Y = y
         velocity.Z = z
+    End Sub
+
+    Public Sub setRotation(r As Double)
+        Me.r = r
     End Sub
 
     Public Function getX() As Double
@@ -89,7 +125,7 @@ Public Class entity
         Return Me.texture
     End Function
 
-    Public Function getVelocity() As Vector3
+    Public Function getVelocity() As Vector3d
         Return Me.velocity
     End Function
 

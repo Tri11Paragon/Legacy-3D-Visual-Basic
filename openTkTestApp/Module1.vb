@@ -90,9 +90,6 @@ Module Module1
             LoadTextures()
             world.create()
             gui.create()
-
-
-            world.entites.Add(New entity(polys.pigMesh, world.textures(0), 0, 5, 0))
         End Sub
 
         Protected Overrides Sub OnDisposed(e As EventArgs)
@@ -141,6 +138,7 @@ Module Module1
 
             GL.LoadIdentity()
             gui.render()
+            clock.update()
 
             If camera.dVr(4) And Not gui.isEscapeOpen Then
                 yaw += camera.dVr(2) * 0.5 * settings.sensitivity * settings.flipRotate

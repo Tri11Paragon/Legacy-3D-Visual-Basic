@@ -100,8 +100,55 @@ Public Class o_helper
 
 End Class
 
-Public Class o_timer
+Class clock
+    Private Shared paused As Boolean = False
+    Public Shared lastFrame, totalTime, startTime As Long
+    Public Shared d As Double = 0, multiplier As Double = 1
 
 
+    Public Shared Function getDelta() As Double
+        Dim currentTime As Long = TimeOfDay.Ticks
+        Dim delta As Double = CInt((currentTime - lastFrame))
+        Console.WriteLine(delta & " :: " & currentTime & " :: " & lastFrame)
+        lastFrame = TimeOfDay.Ticks
 
+        If delta * 0.001F > 0.05F Then
+            Return 0.05F
+        End If
+
+        Return delta * 0.001F
+    End Function
+
+    Public Shared Function Delta() As Double
+        If paused Then
+            Return 0
+        Else
+            Return d * multiplier
+        End If
+    End Function
+
+    Public Shared Function getTotalTime() As Double
+        Return totalTime
+    End Function
+
+    Public Shared Function getMultiplier() As Double
+        Return multiplier
+    End Function
+
+    Public Shared Sub update()
+        d = getDelta()
+        totalTime += d
+    End Sub
+
+    Public Shared Sub ChangeMultiplier(ByVal change As Double)
+        multiplier += change
+    End Sub
+
+    Public Shared Sub Pause()
+        If paused Then
+            paused = False
+        Else
+            paused = True
+        End If
+    End Sub
 End Class

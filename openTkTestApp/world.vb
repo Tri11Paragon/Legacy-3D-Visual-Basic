@@ -41,22 +41,82 @@ Public Class world
     Public Shared Sub loadEntites()
         Try ' catches erros
             ' loads the file into memory
-            Dim FS As New FileStream("data/settings.dat", FileMode.Open, FileAccess.Read)
+            Dim FS As New FileStream("data/world.dat", FileMode.Open, FileAccess.Read)
             Dim cf As New StreamReader(FS)
 
             ' tells the program if its already reading an entity
             Dim enityStarted As Boolean = False
 
+            Dim ents As Dictionary(Of String, Mesh) = New Dictionary(Of String, Mesh)
+            Dim pos As New Vector3(0, 0, 0)
+            Dim rotation As Double = 0
+            Dim velocity As New Vector3d(0, 0, 0)
+            Dim acceleration As New Vector3d(0, 0, 0)
+            Dim texture As Integer = 0
+            Dim mesh As String = "pig.obj"
+
             'read the file
             Do While cf.Peek <> -1
                 Dim line As String = o_helper.fn_1293(cf.ReadLine())
                 If Not line.Equals("%") Then ' remove comments
+                    If line.StartsWith("{") And enityStarted Then
+                        Throw New Exception("INCOMPLETE ENTITY FORMAT!")
+                    End If
                     If line.StartsWith("{") And Not enityStarted Then
                         enityStarted = True
                     End If
+                    If enityStarted And Not line.StartsWith("{") And Not line.StartsWith("}") Then
+                        Dim tmp = line.Split(":")
+                        Dim spaces As List(Of String) = New List(Of String)(tmp(1).Split(" "))
+                        If String.IsNullOrWhiteSpace(spaces(0)) Or String.IsNullOrEmpty(spaces(0)) Then
+                            spaces.RemoveAt(0)
+                        End If
 
-                    If line.StartsWith("}") Then
+                        If line.StartsWith("position:") Then
+                            pos = New Vector3(Double.Parse(spaces(0)), Double.Parse(spaces(1)), Double.Parse(spaces(2)))
+                        End If
+                        If line.StartsWith("rotation:") Then
+                            rotation = Double.Parse(spaces(0))
+                        End If
+                        If line.StartsWith("velocity:") Then
+                            velocity = New Vector3d(Double.Parse(spaces(0)), Double.Parse(spaces(1)), Double.Parse(spaces(2)))
+                        End If
+                        If line.StartsWith("acceleration:") Then
+                            acceleration = New Vector3d(Double.Parse(spaces(0)), Double.Parse(spaces(1)), Double.Parse(spaces(2)))
+                        End If
+                        If line.StartsWith("texture:") Then
+                            texture = Integer.Parse(spaces(0))
+                        End If
+                        If line.StartsWith("mesh:") Then
+                            mesh = spaces(0)
+                        End If
+                    End If
+                    If line.StartsWith("}") And enityStarted Then
+                        Console.WriteLine("Loading Enity!")
+                        If String.IsNullOrEmpty(mesh) Then
+                            Throw New Exception("MESH NAME NOT FOUND!")
+                        End If
+                        Dim m As Mesh
+
+                        If Not ents.TryGetValue(mesh, m) Then
+                            m = polys.BLoad("primitives/" & mesh)
+                            ents.Add(mesh, m)
+                        End If
+
+                        Dim entity As New entity(m, texture, pos.X, pos.Y, pos.Z)
+                        entity.setRotation(rotation)
+                        entity.setVelocity(velocity)
+                        entity.setAcceleration(acceleration)
+
+                        entites.Add(entity)
                         enityStarted = False
+                        'reset the values of the loader
+                        pos = New Vector3(0, 0, 0)
+                        rotation = 0
+                        velocity = New Vector3d(0, 0, 0)
+                        acceleration = New Vector3d(0, 0, 0)
+                        texture = 0
+                        mesh = "pig.obj"
                     End If
                 End If
             Loop
@@ -75,11 +135,12 @@ Public Class world
         'saves to file
         For Each e As entity In entites
             cf.WriteLine("{") ' these explain themselves
-            cf.WriteLine("position:" & e.getX() & " " & e.getY() & " " & e.getZ())
-            cf.WriteLine("rotation:" & e.getRotation())
-            cf.WriteLine("velocity:" & e.getVelocity().X & " " & e.getVelocity().Y & " " & e.getVelocity().Z)
-            cf.WriteLine("texture:" & e.getTexture())
-            cf.WriteLine("mesh:" & e.getMesh().name)
+            cf.WriteLine("position: " & e.getX() & " " & e.getY() & " " & e.getZ())
+            cf.WriteLine("rotation: " & e.getRotation())
+            cf.WriteLine("velocity: " & e.getVelocity().X & " " & e.getVelocity().Y & " " & e.getVelocity().Z)
+            cf.WriteLine("acceleration: " & e.getAcceleration().X & " " & e.getAcceleration().Y & " " & e.getAcceleration().z)
+            cf.WriteLine("texture: " & e.getTexture())
+            cf.WriteLine("mesh: " & e.getMesh().name)
             cf.WriteLine("}")
         Next
 
