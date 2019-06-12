@@ -102,6 +102,20 @@ Module Module1
             MyBase.OnDisposed(e)
         End Sub
 
+        Protected Overrides Sub OnClosed(e As EventArgs)
+            world.saveEntities()
+            gui.unload()
+            settings.saveSettings()
+            MyBase.OnClosed(e)
+        End Sub
+
+        Protected Overrides Sub OnUnload(e As EventArgs)
+            world.saveEntities()
+            gui.unload()
+            settings.saveSettings()
+            MyBase.OnUnload(e)
+        End Sub
+
         Protected Overrides Sub OnResize(ByVal e As System.EventArgs)
             MyBase.OnResize(e)
 

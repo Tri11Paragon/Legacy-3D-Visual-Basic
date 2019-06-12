@@ -51,8 +51,12 @@ Public Class world
             Do While cf.Peek <> -1
                 Dim line As String = o_helper.fn_1293(cf.ReadLine())
                 If Not line.Equals("%") Then ' remove comments
-                    If line.StartsWith("{") Then
+                    If line.StartsWith("{") And Not enityStarted Then
+                        enityStarted = True
+                    End If
 
+                    If line.StartsWith("}") Then
+                        enityStarted = False
                     End If
                 End If
             Loop
