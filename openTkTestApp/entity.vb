@@ -16,6 +16,8 @@ Public Class entity
     Private velocity As Vector3d
     Private mesh As Mesh
     Private acceleration As Vector3d
+    Private isOnGround As Boolean = False
+    Private friction As Double = 5.23D
 
     ' start time
     Dim start = 0
@@ -30,25 +32,65 @@ Public Class entity
     End Sub
 
     Public Function isMoving() As Boolean
-        Return If(velocity.X > 0, True, False) Or If(velocity.Y > 0, True, False) Or If(velocity.Z > 0, True, False)
+        Return If(velocity.X <> 0, True, False) Or If(velocity.Y <> 0, True, False) Or If(velocity.Z <> 0, True, False)
     End Function
 
     Public Function isAccelerating() As Boolean
-        Return If(acceleration.X > 0, True, False) Or If(acceleration.Y > 0, True, False) Or If(acceleration.Z > 0, True, False)
+        Return If(acceleration.X <> 0, True, False) Or If(acceleration.Y <> 0, True, False) Or If(acceleration.Z <> 0, True, False)
     End Function
 
     Public Sub update()
         If (isMoving()) Then
-            x += velocity.X
-            y += velocity.Y
-            z += velocity.Z
+            ' adds the velocity to the entity each update
+            ' it also adjusts for the clock delta
+            x += velocity.X * clock.Delta()
+            y += velocity.Y * clock.Delta()
+            z += velocity.Z * clock.Delta()
         End If
-        'If start + 1000 < TimeOfDay.Millisecond Then
         If isAccelerating() Then
+            ' this moves the entity according to the clock delta. (basiclly means if the game lags, then the movement will account for the lag)
             velocity += (acceleration * clock.Delta())
-            'Console.WriteLine(clock.Delta())
         End If
-        'End If
+        Console.WriteLine(acceleration.Y)
+        If acceleration.Y <= -42 Then
+            acceleration.Y = -42
+        Else
+            acceleration.Y += -9.81
+        End If
+        If y <= 0.0 Then
+            isOnGround = True
+            y = 0.0
+            If velocity.Y <= 0 Then
+                velocity.Y = 0
+            End If
+            'If acceleration.Y <= 0 Then
+            'acceleration.Y = 0
+            'End If
+        Else
+            isOnGround = False
+        End If
+        If isOnGround Then
+            acceleration.Y += 100
+            acceleration.X += 0.01
+            acceleration.Z += 0.01
+            If isAccelerating() Then
+                If acceleration.X > 0 Then
+                    acceleration.X -= friction
+                Else
+                    acceleration.X += friction
+                End If
+                If acceleration.Z > 0 Then
+                    acceleration.Z -= friction
+                Else
+                    acceleration.Z += friction
+                End If
+                If acceleration.Y < 0 Then
+                    acceleration.Y = 0
+                    acceleration.X = 0
+                    acceleration.Z = 0
+                End If
+            End If
+        End If
     End Sub
 
     Public Sub birth(e As entity)

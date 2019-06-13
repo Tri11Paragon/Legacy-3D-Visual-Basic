@@ -68,7 +68,7 @@ Module Module1
             GL.Enable(EnableCap.Texture2D)
             GL.Enable(EnableCap.Blend)
             GL.Enable(EnableCap.Multisample)
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)
+            'GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)
 
             polys.loadPolys()
 

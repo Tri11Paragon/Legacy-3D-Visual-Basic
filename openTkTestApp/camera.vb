@@ -25,7 +25,7 @@ Public Class camera
     Public Shared enableVirtical As Boolean = False
 
     Public Shared Sub load()
-        y = -5
+        'y = -5
     End Sub
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)

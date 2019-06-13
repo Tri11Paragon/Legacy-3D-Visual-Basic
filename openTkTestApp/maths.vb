@@ -100,6 +100,7 @@ Public Class o_helper
 
 End Class
 
+'clock class
 Class clock
     Private Shared paused As Boolean = False
     Public Shared lastFrame, totalTime, startTime As Long
@@ -107,11 +108,11 @@ Class clock
 
 
     Public Shared Function getDelta() As Double
-        Dim currentTime As Long = TimeOfDay.Ticks
-        Dim delta As Double = CInt((currentTime - lastFrame))
-        Console.WriteLine(delta & " :: " & currentTime & " :: " & lastFrame)
-        lastFrame = TimeOfDay.Ticks
+        Dim currentTime As Long = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) ' yes this is very long and is not needed, you could just use datetime.now.millisconds but this is the proper way for getting milliseconds
+        Dim delta As Double = (currentTime - lastFrame) ' get the change between last renderering frame and current renderering frame
+        lastFrame = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) ' update the last frame time
 
+        ' prevent overflow of delta (Prevents too much frame-skipping)
         If delta * 0.001F > 0.05F Then
             Return 0.05F
         End If
@@ -119,6 +120,7 @@ Class clock
         Return delta * 0.001F
     End Function
 
+    ' this returns the delta times the multiplier which allows for speededing up the game
     Public Shared Function Delta() As Double
         If paused Then
             Return 0
@@ -127,23 +129,28 @@ Class clock
         End If
     End Function
 
+    'returns the total time of the program
     Public Shared Function getTotalTime() As Double
         Return totalTime
     End Function
 
+    'retruns the muiltiplier
     Public Shared Function getMultiplier() As Double
         Return multiplier
     End Function
 
+    'update the clock
     Public Shared Sub update()
         d = getDelta()
         totalTime += d
     End Sub
 
+    'change multiplier
     Public Shared Sub ChangeMultiplier(ByVal change As Double)
         multiplier += change
     End Sub
 
+    'pause the game(not used)
     Public Shared Sub Pause()
         If paused Then
             paused = False

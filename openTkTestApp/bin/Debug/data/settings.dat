@@ -1,5 +1,7 @@
 useSkybox:True
 flipRotate:1
 scale:1 1 1
-speed:0.4
+speed:0.2
 sensitivity:0.75
+cameraPosition:7.12107053739683 -13.7999999999999 -1.27373848072574
+cameraRotation:-47.9249999999999 -2439.75

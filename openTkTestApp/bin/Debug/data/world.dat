@@ -1,24 +1,24 @@
 {
-position: 0 5 0
+position: -0.627940239651153 9.42051589490092 -0.627940239651153
 rotation: 0
-velocity: 0 0 0
-acceleration: 0 0 0
+velocity: 0.0188800008967399 -0.783000037190504 0.0188800008967399
+acceleration: 0.119999999999997 -42 0.119999999999997
 texture: 1
 mesh: pig.obj
 }
 {
-position: 0 10 0
+position: -0.582577215341906 2.61425444834083 -0.582577215341906
 rotation: 0
-velocity: 0 0 0
-acceleration: 0 0 0
+velocity: 0.131500006245901 -24.9137011833373 0.131500006245901
+acceleration: 0.119999999999997 -42 0.119999999999997
 texture: 1
 mesh: pig.obj
 }
 {
-position: 0 6.58499982452416 0
+position: 0 104685.771985401 0
 rotation: 0
-velocity: 0 0.001 0
-acceleration: 0 0.01 0
+velocity: 0 -439.707454320162 0
+acceleration: 0 -42 0
 texture: 4
 mesh: bever.obj
 }
