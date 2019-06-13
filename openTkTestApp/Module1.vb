@@ -68,7 +68,7 @@ Module Module1
             GL.Enable(EnableCap.Texture2D)
             GL.Enable(EnableCap.Blend)
             GL.Enable(EnableCap.Multisample)
-            'GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)
 
             polys.loadPolys()
 
@@ -151,6 +151,10 @@ Module Module1
 
             If (-pitch < -90) Then
                 pitch = 90
+            End If
+
+            If (yaw > 360) Then
+                yaw = 0
             End If
 
             GL.Rotate(-pitch, 1, 0, 0)

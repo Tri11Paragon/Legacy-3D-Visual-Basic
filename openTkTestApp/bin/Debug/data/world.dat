@@ -1,24 +1,30 @@
 {
-position: -0.627940239651153 9.42051589490092 -0.627940239651153
+position: 5.62449073791504 0 5.62449073791504
 rotation: 0
-velocity: 0.0188800008967399 -0.783000037190504 0.0188800008967399
-acceleration: 0.119999999999997 -42 0.119999999999997
-texture: 1
+velocity: 0 0 0
+acceleration: 0 0 0
+texture: 2
 mesh: pig.obj
+birthChance: 15
+deathChance: 10
 }
 {
-position: -0.582577215341906 2.61425444834083 -0.582577215341906
+position: 0.975999057292938 0 0.975999057292938
 rotation: 0
-velocity: 0.131500006245901 -24.9137011833373 0.131500006245901
-acceleration: 0.119999999999997 -42 0.119999999999997
+velocity: 0 0 0
+acceleration: 0 0 0
 texture: 1
 mesh: pig.obj
+birthChance: 15
+deathChance: 10
 }
 {
-position: 0 104685.771985401 0
+position: 0.975999057292938 175994218517.244 0.975999057292938
 rotation: 0
-velocity: 0 -439.707454320162 0
-acceleration: 0 -42 0
-texture: 4
-mesh: bever.obj
+velocity: 0 1869326118.6108 0
+acceleration: 0 9890010.27999414 0
+texture: 1
+mesh: pig.obj
+birthChance: 15
+deathChance: 10
 }

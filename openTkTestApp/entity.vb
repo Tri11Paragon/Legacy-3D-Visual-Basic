@@ -11,13 +11,15 @@ Public Class entity
     Private x As Double
     Private y As Double
     Private z As Double
-    Private r As Double ' rotation
+    Private rotation As Double ' rotation
     Private texture As Integer
     Private velocity As Vector3d
     Private mesh As Mesh
     Private acceleration As Vector3d
     Private isOnGround As Boolean = False
     Private friction As Double = 5.23D
+    Public deathChance As Double = 10 ' im not going to use getters and setters for this stuff. its pointless as there will be no math with it
+    Public birthChance As Double = 15 ' im also the only developer so like i don't really need access rules
 
     ' start time
     Dim start = 0
@@ -51,7 +53,6 @@ Public Class entity
             ' this moves the entity according to the clock delta. (basiclly means if the game lags, then the movement will account for the lag)
             velocity += (acceleration * clock.Delta())
         End If
-        Console.WriteLine(acceleration.Y)
         If acceleration.Y <= -42 Then
             acceleration.Y = -42
         Else
@@ -63,34 +64,19 @@ Public Class entity
             If velocity.Y <= 0 Then
                 velocity.Y = 0
             End If
-            'If acceleration.Y <= 0 Then
-            'acceleration.Y = 0
-            'End If
+            If acceleration.Y <= 0 Then
+                acceleration.Y = 0
+            End If
         Else
             isOnGround = False
         End If
         If isOnGround Then
-            acceleration.Y += 100
-            acceleration.X += 0.01
-            acceleration.Z += 0.01
-            If isAccelerating() Then
-                If acceleration.X > 0 Then
-                    acceleration.X -= friction
-                Else
-                    acceleration.X += friction
-                End If
-                If acceleration.Z > 0 Then
-                    acceleration.Z -= friction
-                Else
-                    acceleration.Z += friction
-                End If
-                If acceleration.Y < 0 Then
-                    acceleration.Y = 0
-                    acceleration.X = 0
-                    acceleration.Z = 0
-                End If
-            End If
+            bounce()
         End If
+    End Sub
+
+    Public Sub bounce()
+        'acceleration.Y += 100
     End Sub
 
     Public Sub birth(e As entity)
@@ -147,8 +133,8 @@ Public Class entity
         velocity.Z = z
     End Sub
 
-    Public Sub setRotation(r As Double)
-        Me.r = r
+    Public Sub setRotation(rotation As Double)
+        Me.rotation = rotation
     End Sub
 
     Public Function getX() As Double
@@ -172,7 +158,7 @@ Public Class entity
     End Function
 
     Public Function getRotation() As Double
-        Return Me.r
+        Return Me.rotation
     End Function
 
     Public Function getMesh() As Mesh

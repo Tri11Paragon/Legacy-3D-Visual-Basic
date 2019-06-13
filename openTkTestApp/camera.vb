@@ -17,7 +17,7 @@ Public Class camera
     Public Const SW_HIDE As Integer = 0
     Public Const SW_SHOW As Integer = 1
 
-    Public Shared keysDown(230) As Boolean
+    Public Shared keysDown(500) As Boolean
     Public Shared dVr(5) As Int16 ' stores data of boolean varabiles in a int16
 
     Public Shared x, y, z As Double
@@ -30,25 +30,6 @@ Public Class camera
 
     Public Shared Sub keyPressed(e As KeyPressEventArgs)
         gui.keyPressed(e)
-        If isSpecialUsr() And keysDown(Key.F) Then
-            If settings.flipRotate = 1 Then
-                settings.flipRotate = -1
-            Else
-                settings.flipRotate = 1
-            End If
-            Console.WriteLine("Flip camera rotation: " & settings.flipRotate)
-        End If
-        If isSpecialUsr() And keysDown(Key.S) And keysDown(Key.Plus) Then
-            settings.speed += 0.1D
-            Console.WriteLine("Speed is now: " & settings.speed)
-        End If
-        If isSpecialUsr() And keysDown(Key.S) And keysDown(Key.Minus) Then
-            settings.speed -= 0.1D
-            Console.WriteLine("Speed is now: " & settings.speed)
-        End If
-        If isUsrDwn() And keysDown(Key.S) Then
-            world.saveEntities()
-        End If
     End Sub
 
     Public Shared Sub keyReleased(e As KeyboardKeyEventArgs)
@@ -103,10 +84,33 @@ Public Class camera
 
     Public Shared Sub keyDown(e As KeyboardKeyEventArgs)
         keysDown(e.ScanCode) = True
+        If isSpecialEnt() And keysDown(Key.F) Then
+            If settings.flipRotate = 1 Then
+                settings.flipRotate = -1
+            Else
+                settings.flipRotate = 1
+            End If
+            Console.WriteLine("Flip camera rotation: " & settings.flipRotate)
+        End If
+        If isSpecialEnt() And keysDown(Key.S) And keysDown(Key.Plus) Then
+            settings.speed += 0.1D
+            Console.WriteLine("Speed is now: " & settings.speed)
+        End If
+        If isSpecialEnt() And keysDown(Key.S) And keysDown(Key.Minus) Then
+            settings.speed -= 0.1D
+            Console.WriteLine("Speed is now: " & settings.speed)
+        End If
+        If isEntDwn() And keysDown(Key.S) Then
+            world.saveEntities()
+        End If
+        If isSpecialEnt() And keysDown(Key.C) Then
+            world.reload()
+            Console.WriteLine("Reloading from file")
+        End If
     End Sub
 
     Public Shared Sub update()
-        If Not isUsrDwn() Then
+        If Not isUsrDwn() And Not isEntDwn() Then
             If keysDown(Key.W) Then
                 moveAtX = settings.speed
             Else

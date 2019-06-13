@@ -38,6 +38,11 @@ Public Class world
         'If (20 - 1) * Rnd() = 1
     End Sub
 
+    Public Shared Sub reload()
+        entites = New List(Of entity)
+        loadEntites()
+    End Sub
+
     Public Shared Sub loadEntites()
         Try ' catches erros
             ' loads the file into memory
@@ -54,6 +59,8 @@ Public Class world
             Dim acceleration As New Vector3d(0, 0, 0)
             Dim texture As Integer = 0
             Dim mesh As String = "pig.obj"
+            Dim birth As Double = 15
+            Dim death As Double = 10
 
             'read the file
             Do While cf.Peek <> -1
@@ -90,6 +97,12 @@ Public Class world
                         If line.StartsWith("mesh:") Then
                             mesh = spaces(0)
                         End If
+                        If line.StartsWith("birthChance:") Then
+                            birth = Double.Parse(spaces(0))
+                        End If
+                        If line.StartsWith("deathChance:") Then
+                            death = Double.Parse(spaces(0))
+                        End If
                     End If
                     If line.StartsWith("}") And enityStarted Then
                         Console.WriteLine("Loading Enity!")
@@ -107,6 +120,8 @@ Public Class world
                         entity.setRotation(rotation)
                         entity.setVelocity(velocity)
                         entity.setAcceleration(acceleration)
+                        entity.deathChance = death
+                        entity.birthChance = birth
 
                         entites.Add(entity)
                         enityStarted = False
@@ -117,6 +132,8 @@ Public Class world
                         acceleration = New Vector3d(0, 0, 0)
                         texture = 0
                         mesh = "pig.obj"
+                        death = 10
+                        birth = 15
                     End If
                 End If
             Loop
@@ -141,6 +158,8 @@ Public Class world
             cf.WriteLine("acceleration: " & e.getAcceleration().X & " " & e.getAcceleration().Y & " " & e.getAcceleration().z)
             cf.WriteLine("texture: " & e.getTexture())
             cf.WriteLine("mesh: " & e.getMesh().name)
+            cf.WriteLine("birthChance: " & e.birthChance)
+            cf.WriteLine("deathChance: " & e.deathChance)
             cf.WriteLine("}")
         Next
 
@@ -179,7 +198,7 @@ Public Class world
         Randomize()
         Do
             ' loads the music, tells the user what it is and then waits.
-            Dim msc = musics(CType(((musics.Count - 1) - 1) * Rnd(), Integer))
+            Dim msc = musics(CType(Math.Round(((musics.Count - 1) - 1) * Rnd(), 0), Integer))
             Console.WriteLine("Now playing: " & msc)
             My.Computer.Audio.Play(msc, AudioPlayMode.WaitToComplete)
             Thread.Sleep(1000)
