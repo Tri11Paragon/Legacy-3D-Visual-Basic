@@ -35,15 +35,15 @@ Public Class camera
     Public Shared Sub keyReleased(e As KeyboardKeyEventArgs)
         keysDown(e.ScanCode) = False
 
-        If e.ScanCode = 20 Then
-            If dVr(0) = 0 Then
-                dVr(0) = 1
-            Else
-                dVr(0) = 0
-            End If
-            camera.ShowWindow(camera.GetConsoleWindow(), dVr(0))
-
-        End If
+        'If e.ScanCode = 20 Then
+        'If dVr(0) = 0 Then
+        'dVr(0) = 1
+        'Else
+        'dVr(0) = 0
+        'End If
+        'camera.ShowWindow(camera.GetConsoleWindow(), dVr(0))
+        '
+        'End If
 
         If e.ScanCode = 19 Then
             If dVr(1) = 0 Then
@@ -152,7 +152,7 @@ Public Class camera
         End If
 
         If settings.useSkybox Then
-            GL.BindTexture(TextureTarget.Texture2D, world.textures(12))
+            GL.BindTexture(TextureTarget.Texture2D, world.textures(500))
             artist.drawMesh(polys.cubeMesh)
         End If
 

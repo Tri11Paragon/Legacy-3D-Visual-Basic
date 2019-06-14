@@ -16,6 +16,10 @@ Public Class maths
         Return New Vector3(Math.Abs(v.X - v2.X), Math.Abs(v.Y - v2.Y), Math.Abs(v.Z - v2.Z))
     End Function
 
+    Public Shared Function distanceD(v As Vector3, v2 As Vector3) As Double
+        Return Math.Abs((v.X + v.Y + v.Z) - (v2.X + v2.Y + v2.Z))
+    End Function
+
     Public Shared Function distance(x1 As Double, y1 As Double, z1 As Double, x2 As Double, y2 As Double, z2 As Double) As Vector3
         Return New Vector3(Math.Abs(x1 - x2), Math.Abs(y1 - y2), Math.Abs(z1 - z2))
     End Function

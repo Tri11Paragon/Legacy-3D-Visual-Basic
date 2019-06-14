@@ -1,7 +1,7 @@
 useSkybox:True
-flipRotate:-1
+flipRotate:1
 scale:1 1 1
-speed:0.2
+speed:0.4
 sensitivity:0.75
-cameraPosition:-9.91377673747703 -1.7 -2.72695858927661
-cameraRotation:-62.1000000000001 -277.875
+cameraPosition:11.9986768548998 -17.4 7.73269831113826
+cameraRotation:-2.47499999999996 135.75

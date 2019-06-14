@@ -25,9 +25,9 @@ Module Module1
 
         End Sub
 
-        Protected Sub LoadTexture(ByVal textureId As Integer, ByVal filename As String)
+        Protected Sub LoadTexture(ByVal textureId As Integer, ByVal path As String)
             'Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + 
-            Dim bmp As New Bitmap("textures/" + filename)
+            Dim bmp As New Bitmap(path)
 
             Dim data As BitmapData = bmp.LockBits(New Rectangle(0, 0, bmp.Width, bmp.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
 
@@ -37,27 +37,24 @@ Module Module1
             bmp.UnlockBits(data)
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, TextureMinFilter.Linear)
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, TextureMagFilter.Linear)
+            Console.WriteLine("Texture " & System.IO.Path.GetFileName(path) & " has been loaded at: " & textureId)
         End Sub
 
         Protected Sub LoadTextures()
             Console.WriteLine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName))
             GL.GenTextures(world.textures.Length, world.textures)
-            LoadTexture(world.textures(0), "rms.png")
-            LoadTexture(world.textures(1), "emoji_code.png")
-            LoadTexture(world.textures(2), "gilmie.jpg")
-            LoadTexture(world.textures(3), "goldfish_car.jpg")
-            LoadTexture(world.textures(4), "icon.png")
-            LoadTexture(world.textures(5), "lunx.png")
-            LoadTexture(world.textures(6), "http___i.huffpost.com_gen_5334752_images_n-GIANT-DUCK-628x314.jpg")
-            LoadTexture(world.textures(7), "Tux_Mono.svg.png")
-            LoadTexture(world.textures(8), "download.jpg")
-            LoadTexture(world.textures(9), "l3lmzb0a2xw21.jpg")
-            LoadTexture(world.textures(10), "ab4pjx3bnww21.jpg")
-            LoadTexture(world.textures(11), "pig.png")
-            LoadTexture(world.textures(12), "skybox/cube.png")
-            LoadTexture(world.textures(13), "grass.png")
-            LoadTexture(world.textures(14), "tree.png")
-            LoadTexture(world.textures(15), "white.png")
+            Dim textures As List(Of String) = New List(Of String)
+            For Each file As String In My.Computer.FileSystem.GetFiles("textures/")
+                textures.Add(file)
+            Next
+            If textures.Count > 498 Then
+                textures.RemoveRange(498, textures.Count - 498)
+            End If
+            For i As Integer = 0 To textures.Count - 1
+                LoadTexture(world.textures(i), textures(i)) ' loads the found files into a texture buffer
+            Next
+            LoadTexture(world.textures(499), "textures/grass.png")
+            LoadTexture(world.textures(500), "textures/skybox/cube.png")
         End Sub
 
         Protected Overrides Sub OnLoad(ByVal e As System.EventArgs)
@@ -83,7 +80,7 @@ Module Module1
             GL.MatrixMode(MatrixMode.Modelview)
             GL.LoadIdentity()
 
-            camera.ShowWindow(camera.GetConsoleWindow(), camera.SW_HIDE)
+            'camera.ShowWindow(camera.GetConsoleWindow(), camera.SW_HIDE)
             MyBase.CursorVisible = False
             camera.load()
 

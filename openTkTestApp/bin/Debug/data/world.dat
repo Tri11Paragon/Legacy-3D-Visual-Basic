@@ -1,28 +1,38 @@
+(
+traitChance:1.5
+traitTexture:1
+traitType: death
+)
+(
+traitChance:2.5
+traitTexture:2
+traitType: birth
+)
 {
-position: 5.62449073791504 0 5.62449073791504
+position: 5.62449073791504 11.865395447152 5.62449073791504
 rotation: 0
-velocity: 0 0 0
-acceleration: 0 0 0
+velocity: 0 29.8003714154416 0
+acceleration: 0 -42 0
 texture: 2
 mesh: pig.obj
 birthChance: 15
 deathChance: 10
 }
 {
-position: 0.975999057292938 0 0.975999057292938
+position: 0.975999057292938 11.865395447152 0.975999057292938
 rotation: 0
-velocity: 0 0 0
-acceleration: 0 0 0
+velocity: 0 29.8003714154416 0
+acceleration: 0 -42 0
 texture: 1
 mesh: pig.obj
 birthChance: 15
 deathChance: 10
 }
 {
-position: 0.975999057292938 175994218517.244 0.975999057292938
+position: 0.975999057292938 793806329181.108 0.975999057292938
 rotation: 0
-velocity: 0 1869326118.6108 0
-acceleration: 0 9890010.27999414 0
+velocity: 0 3953464913.66027 0
+acceleration: 0 9766678.9599876 0
 texture: 1
 mesh: pig.obj
 birthChance: 15

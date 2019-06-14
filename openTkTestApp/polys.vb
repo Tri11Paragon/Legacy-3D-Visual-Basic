@@ -52,39 +52,42 @@ Public Class polys
 
         name = System.IO.Path.GetFileName(path)
 
-        Using streamReader As StreamReader = New StreamReader(path)
-            While Not streamReader.EndOfStream
-                Dim words As List(Of String) = New List(Of String)(streamReader.ReadLine().ToLower().Split(" "))
-                words.RemoveAll(Function(s) s = String.Empty)
-                If words.Count = 0 Then Continue While
-                Dim type As String = words(0)
-                words.RemoveAt(0)
+        Try
+            Using streamReader As StreamReader = New StreamReader(path)
+                While Not streamReader.EndOfStream
+                    Dim words As List(Of String) = New List(Of String)(streamReader.ReadLine().ToLower().Split(" "))
+                    words.RemoveAll(Function(s) s = String.Empty)
+                    If words.Count = 0 Then Continue While
+                    Dim type As String = words(0)
+                    words.RemoveAt(0)
 
-                'Console.WriteLine(words.Count)
+                    'Console.WriteLine(words.Count)
 
-                Select Case type
-                    Case "v"
-                        verts.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
-                    Case "vt"
-                        texts.Add(New Vector2(Single.Parse(words(0)), Single.Parse(words(1))))
-                    Case "vn"
-                        norms.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
-                    Case "f"
+                    Select Case type
+                        Case "v"
+                            verts.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
+                        Case "vt"
+                            texts.Add(New Vector2(Single.Parse(words(0)), Single.Parse(words(1))))
+                        Case "vn"
+                            norms.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
+                        Case "f"
 
-                        For Each w As String In words
-                            'Console.WriteLine(w)
-                            If w.Length = 0 Then Continue For
-                            Dim comps As String() = w.Split("/")
-                            vertices.Add(verts(UInteger.Parse(comps(0)) - 1))
-                            If comps.Length > 1 AndAlso comps(1).Length <> 0 Then textureVertices.Add(texts(UInteger.Parse(comps(1)) - 1))
-                            If comps.Length > 2 Then normals.Add(norms(UInteger.Parse(comps(2)) - 1))
-                        Next
+                            For Each w As String In words
+                                'Console.WriteLine(w)
+                                If w.Length = 0 Then Continue For
+                                Dim comps As String() = w.Split("/")
+                                vertices.Add(verts(UInteger.Parse(comps(0)) - 1))
+                                If comps.Length > 1 AndAlso comps(1).Length <> 0 Then textureVertices.Add(texts(UInteger.Parse(comps(1)) - 1))
+                                If comps.Length > 2 Then normals.Add(norms(UInteger.Parse(comps(2)) - 1))
+                            Next
 
-                    Case Else
-                End Select
-            End While
-        End Using
+                        Case Else
+                    End Select
+                End While
+            End Using
+        Catch e As Exception
 
+        End Try
         Return New Mesh(name, vertices, textureVertices, normals)
     End Function
 

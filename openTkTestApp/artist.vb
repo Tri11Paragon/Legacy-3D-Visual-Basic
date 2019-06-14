@@ -15,19 +15,17 @@ Public Class artist
         drawMesh(m)
         GL.Translate(-x, -y, -z)
     End Sub
-
-    Public Shared Sub drawMesh(ByRef m As Mesh, x As Double, y As Double, z As Double)
+    Public Shared Sub drawMesh(ByRef m As Mesh, ByRef texture As Integer, r As Double, g As Double, b As Double, x As Double, y As Double, z As Double)
+        GL.BindTexture(TextureTarget.Texture2D, texture)
         GL.Translate(x, y, z)
-        drawMesh(m)
+        drawMesh(m, r, g, b)
         GL.Translate(-x, -y, -z)
     End Sub
 
-    Public Shared Sub drawMesh(ByRef m As Mesh, c As Color, x As Double, y As Double, z As Double)
-        GL.Color3(c)
+    Public Shared Sub drawMesh(ByRef m As Mesh, r As Double, g As Double, b As Double, x As Double, y As Double, z As Double)
         GL.Translate(x, y, z)
-        drawMesh(m)
+        drawMesh(m, r, g, b)
         GL.Translate(-x, -y, -z)
-        GL.Color3(255, 255, 255)
     End Sub
 
     Public Shared Sub drawMesh(m As Mesh)
@@ -39,6 +37,24 @@ Public Class artist
         GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
         GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, meshTexture)
         Try
+            GL.DrawArrays(PrimitiveType.Triangles, 0, meshVertices.Length)
+        Catch e As System.AccessViolationException
+            Console.WriteLine(e.StackTrace)
+        End Try
+        GL.DisableClientState(ArrayCap.VertexArray)
+        GL.DisableClientState(ArrayCap.TextureCoordArray)
+        GL.PopMatrix()
+    End Sub
+    Public Shared Sub drawMesh(m As Mesh, r As Double, g As Double, b As Double)
+        GL.PushMatrix()
+        GL.EnableClientState(ArrayCap.VertexArray)
+        GL.EnableClientState(ArrayCap.TextureCoordArray)
+        Dim meshVertices = m.vertices.ToArray()
+        Dim meshTexture = m.textureVertices.ToArray()
+        GL.VertexPointer(3, VertexPointerType.Float, 0, meshVertices)
+        GL.TexCoordPointer(2, TexCoordPointerType.Float, 0, meshTexture)
+        Try
+            'GL.Color3(r, g, b)
             GL.DrawArrays(PrimitiveType.Triangles, 0, meshVertices.Length)
         Catch e As System.AccessViolationException
             Console.WriteLine(e.StackTrace)

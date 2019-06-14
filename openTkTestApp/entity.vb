@@ -22,7 +22,7 @@ Public Class entity
     Public birthChance As Double = 15 ' im also the only developer so like i don't really need access rules
 
     ' start time
-    Dim start = 0
+    Dim start As Long = 0
 
     Public Sub New(ByRef mesh As Mesh, ByRef texture As Integer, x As Double, y As Double, z As Double)
         Me.x = x
@@ -30,7 +30,7 @@ Public Class entity
         Me.z = z
         Me.texture = texture
         Me.mesh = mesh
-        start = TimeOfDay.Millisecond
+        start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64)
     End Sub
 
     Public Function isMoving() As Boolean
@@ -73,10 +73,15 @@ Public Class entity
         If isOnGround Then
             bounce()
         End If
+        If CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) - start >= 1000 Then
+            start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64)
+            death()
+            birth(world.findClosestEntity(x, y, z))
+        End If
     End Sub
 
     Public Sub bounce()
-        'acceleration.Y += 100
+        acceleration.Y += 100
     End Sub
 
     Public Sub birth(e As entity)
@@ -84,15 +89,15 @@ Public Class entity
     End Sub
 
     Public Sub death()
-        If ((20 - 1) * Rnd()) = 1 Then
 
-        End If
     End Sub
 
     Public Sub draw()
         'Dim d As Vector3 = maths.distance(-camera.x, camera.y, -camera.z, Me.x, Me.y, Me.z)
         'If (d.X < 40 And d.Z < 40) And d.Y < 40 Then
+        GL.Rotate(rotation, 0, 1, 0)
         artist.drawMesh(mesh, texture, x, y, z)
+        GL.Rotate(rotation, 0, -1, 0)
         'End If
     End Sub
 
@@ -147,6 +152,10 @@ Public Class entity
 
     Public Function getZ() As Double
         Return Me.z
+    End Function
+
+    Public Function getPosition() As Vector3
+        Return New Vector3(Me.x, Me.y, Me.z)
     End Function
 
     Public Function getTexture() As Double
