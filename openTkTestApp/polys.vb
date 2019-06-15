@@ -9,8 +9,6 @@ Imports OpenTK.Input
 
 Public Class polys
 
-    Public Shared mouseMesh As Mesh
-    Public Shared pigMesh As Mesh
     Public Shared terrainMesh As Mesh
     Public Shared cubeMesh As Mesh
     Public Shared face As Mesh
@@ -19,9 +17,9 @@ Public Class polys
     Public Shared tree1 As Mesh
 
     Public Shared Sub loadPolys()
-        mouseMesh = BLoad("primitives/bever.obj")
-        pigMesh = BLoad("primitives/pig.obj")
-        terrainMesh = BLoad("primitives/terrain2.obj")
+        ' loads some of the stuff up (THIS IS NO LONGER USED, HAS BEEN REPLACED BY THE ENTITY LOADER)
+        ' these are still here because sometimes i like to debug stuff.
+        terrainMesh = BLoad("primitives/terrain2.obj") ' this one is still used
         cubeMesh = BLoad("primitives/cube.obj")
         face = BLoad("primitives/face.obj")
         face90 = BLoad("primitives/face.obj")

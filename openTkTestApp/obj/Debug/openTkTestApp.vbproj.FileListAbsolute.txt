@@ -29,3 +29,7 @@ I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\obj\Debug\openTkTestApp.vbproj.Co
 I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\obj\Debug\openTkTestApp.exe
 I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\obj\Debug\openTkTestApp.xml
 I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\obj\Debug\openTkTestApp.pdb
+I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\bin\Debug\openTkTestApp.exe.manifest
+I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\bin\Debug\openTkTestApp.application
+I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\obj\Debug\openTkTestApp.exe.manifest
+I:\Coding\Legacy-3D-Visual-Basic\openTkTestApp\obj\Debug\openTkTestApp.application

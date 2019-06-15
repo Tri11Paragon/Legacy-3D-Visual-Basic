@@ -33,10 +33,12 @@ Public Class entity
         start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64)
     End Sub
 
-    Public Function isMoving() As Boolean
+    ' returns true if the entity's velocity is more then 0
+    Public Function isMoving() As Boolean '
         Return If(velocity.X <> 0, True, False) Or If(velocity.Y <> 0, True, False) Or If(velocity.Z <> 0, True, False)
     End Function
 
+    ' returns true if the entity is accelerating
     Public Function isAccelerating() As Boolean
         Return If(acceleration.X <> 0, True, False) Or If(acceleration.Y <> 0, True, False) Or If(acceleration.Z <> 0, True, False)
     End Function
@@ -53,8 +55,11 @@ Public Class entity
             ' this moves the entity according to the clock delta. (basiclly means if the game lags, then the movement will account for the lag)
             velocity += (acceleration * clock.Delta())
         End If
-        If acceleration.Y <= -42 Then
-            acceleration.Y = -42
+        ' if the acceleration is greater then 42 then we have hit our terminal velocity and therefore will not have more velocity more
+        If velocity.Y <= -42 Then
+            ' sets to make sure we have this correct
+            acceleration.Y = 0
+            velocity.Y = -42
         Else
             acceleration.Y += -9.81
         End If
@@ -73,19 +78,22 @@ Public Class entity
         If isOnGround Then
             bounce()
         End If
-        If CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) - start >= 1000 Then
-            start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64)
+        ' this runs once per entity interval which is defined inside the settings file.
+        If CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) - start >= settings.entityInterval Then
+            start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) ' reset stuff
+            ' do death and birth checks.
             death()
-            birth(world.findClosestEntity(x, y, z))
+            birth()
         End If
     End Sub
 
     Public Sub bounce()
-        acceleration.Y += 100
+        acceleration.Y += 75
     End Sub
 
-    Public Sub birth(e As entity)
-
+    Public Sub birth()
+        'world.findClosestEntity(x, y, z)
+        Console.WriteLine("birth!")
     End Sub
 
     Public Sub death()

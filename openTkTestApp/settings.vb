@@ -9,11 +9,12 @@ Imports OpenTK.Input
 
 Public Class settings
 
-    Public Shared useSkybox As Boolean = True
-    Public Shared flipRotate As Integer = 1
-    Public Shared scale As Double() = {1.0, 1.0, 1.0}
-    Public Shared speed As Double = 0.2
-    Public Shared sensitivity = 0.75
+    Public Shared useSkybox As Boolean = True ' use skybox
+    Public Shared flipRotate As Integer = 1 ' flip how the camera rotates (makes going left go right and going up down) (this is needed on windows 10 because of an unknown error with OPENTK)
+    Public Shared scale As Double() = {1.0, 1.0, 1.0} ' scale of the universe
+    Public Shared speed As Double = 0.2 ' speed of the camera
+    Public Shared sensitivity = 0.75 ' how fast the camera should rotate when mouse moved
+    Public Shared entityInterval As Long = 1000 ' how long before running birth/death checks
 
     ' loads settings from file
     Public Shared Sub loadSettings()
@@ -55,6 +56,9 @@ Public Class settings
                     Module1.GLTexturedCube.pitch = Double.Parse(spaces(0))
                     Module1.GLTexturedCube.yaw = Double.Parse(spaces(1))
                 End If
+                If s(0).StartsWith("entityInterval") Then
+                    entityInterval = Long.Parse(spaces(0))
+                End If
             End If
         Loop
 
@@ -75,6 +79,7 @@ Public Class settings
         cf.WriteLine("sensitivity:" & sensitivity)
         cf.WriteLine("cameraPosition:" & camera.x & " " & camera.y & " " & camera.z)
         cf.WriteLine("cameraRotation:" & Module1.GLTexturedCube.pitch & " " & -Module1.GLTexturedCube.yaw)
+        cf.WriteLine("entityInterval:" & entityInterval)
 
         cf.Close()
         FS.Close()

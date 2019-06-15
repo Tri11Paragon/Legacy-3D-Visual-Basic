@@ -156,12 +156,17 @@ Public Class camera
             artist.drawMesh(polys.cubeMesh)
         End If
 
+        ' checks collion with the ground
         If camera.y >= -0.1 Then
             camera.y = -0.1
         End If
 
+        ' translates the entire world according the the camera postion
         GL.Translate(camera.x, camera.y, camera.z)
+        'scales the rest of the universe
         GL.Scale(settings.scale(0), settings.scale(1), settings.scale(2))
+        ' i don't remeber what this does, but im going to leave it because it sounds important
+        ' i think it has something to do with being something to store if the mouse is currently moving
         dVr(4) = 0
 
     End Sub
@@ -180,30 +185,52 @@ Public Class camera
     End Sub
 
     Public Shared Sub mouseMove(e As MouseMoveEventArgs)
+        ' i don't think these are used but just global storage of the delta x and y of the mouse. 
+        ' please ignore these
         dVr(2) = e.XDelta
         dVr(3) = e.YDelta
 
+        ' if we don't have the escape menu open, then reset the mouse cursor to the center of the screen because OpenTk / VISUAL BASIC 
+        ' SUCKS. This is also what causes the issues on windows 10 but THIS IS THE ONLY WAY OF DOING THIS. Try removing this line and you will understand
+        ' how important this line of code is. While im on a visual basic rant, visual basic should not be taugh in schools, it sucks
+        ' it does not have cross-platform support so that if i had a mac/linux computer i would not be able to run windows forms applications on it.
+        ' the only thing that works on mac/linux is the console application and that only works because some guys on the internet made a compiler for linux.
+        ' i run a linux computer and trying to get this to run has been a nightmare. good thing im not using windows forms applications.
+        ' I should not have to use an OS that invades my privacy to pass a course... /rant
         If gui.isEscapeOpen <> True Then
             SetCursorPos(DisplayDevice.Default.Width / 2, DisplayDevice.Default.Height / 2)
         End If
         dVr(4) = 1
     End Sub
 
+    ' takes a screenshot
     Public Shared Sub takePicture(file As String, format As ImageFormat, x As Integer, y As Integer, w As Integer, h As Integer)
+        ' ok explaining this is going to be hard :/
+        ' flips the current renderering buffer so that the screen is not being rendered
         Module1.app.SwapBuffers()
+        ' pixes taken from the screen
         Dim pixels(w * h * 4) As Byte
+        'bitmap holder
         Dim bi As Bitmap = New Bitmap(w, h)
+        ' the screen
         Dim rect As Rectangle = New Rectangle(x, y, bi.Width, bi.Height)
 
+        ' sets pixel alignment to the 4 defined in the ^ pixels (DO NOT CHANGE)
         GL.PixelStore(PixelStoreParameter.UnpackAlignment, 4)
+        ' reads the pixels off the screen. DO NOT CHANGE THIS. stores them in the pixel buffer defined above
         GL.ReadPixels(x, y, w, h, OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, pixels)
 
-
+        ' create a bitmap with the screen rect
         Dim bit As BitmapData = bi.LockBits(rect, ImageLockMode.ReadWrite, bi.PixelFormat)
+        ' copys pixels into the bitmap
         System.Runtime.InteropServices.Marshal.Copy(pixels, 0, bit.Scan0, pixels.Length())
+        ' unlocks the bitmap
         bi.UnlockBits(bit)
+        ' this is needed because of alignment issues (openGl takes from one rotation, while bitmaps have another so i use this function to realign them)
         bi.RotateFlip(RotateFlipType.RotateNoneFlipY)
+        ' save to a file
         bi.Save("screenshots/" & file, ImageFormat.Png)
+        ' make it so that the user can see the screen again
         Module1.app.SwapBuffers()
     End Sub
 

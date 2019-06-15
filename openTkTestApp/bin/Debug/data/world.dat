@@ -9,30 +9,30 @@ traitTexture:2
 traitType: birth
 )
 {
-position: 5.62449073791504 11.865395447152 5.62449073791504
+position: 5.62449073791504 4.73324393963401 5.62449073791504
 rotation: 0
-velocity: 0 29.8003714154416 0
-acceleration: 0 -42 0
+velocity: 0 16.951710805163 0
+acceleration: 0 -56.01 0
 texture: 2
 mesh: pig.obj
 birthChance: 15
 deathChance: 10
 }
 {
-position: 0.975999057292938 11.865395447152 0.975999057292938
+position: 0.975999057292938 4.73324393963401 0.975999057292938
 rotation: 0
-velocity: 0 29.8003714154416 0
-acceleration: 0 -42 0
+velocity: 0 16.951710805163 0
+acceleration: 0 -56.01 0
 texture: 1
 mesh: pig.obj
 birthChance: 15
 deathChance: 10
 }
 {
-position: 0.975999057292938 793806329181.108 0.975999057292938
+position: 0.975999057292938 1434879093297.06 0.975999057292938
 rotation: 0
-velocity: 0 3953464913.66027 0
-acceleration: 0 9766678.9599876 0
+velocity: 0 5302306512.12573 0
+acceleration: 0 9711052.7774155 0
 texture: 1
 mesh: pig.obj
 birthChance: 15
