@@ -15,6 +15,10 @@ Public Class world
     Public Shared deathChances As Dictionary(Of Integer, Double) = New Dictionary(Of Integer, Double)
     Public Shared birthChances As Dictionary(Of Integer, Double) = New Dictionary(Of Integer, Double)
 
+    ' this is used to prevent crashes
+    Private Shared dyingEntites As New List(Of entity)
+    Private Shared birthingEntites As New List(Of entity)
+
     Shared soundPlayer As SoundPlayer
     Public Shared musics As List(Of String) = New List(Of String)
 
@@ -28,10 +32,23 @@ Public Class world
         GL.BindTexture(TextureTarget.Texture2D, textures(499))
         artist.drawMesh(polys.terrainMesh)
         GL.BindTexture(TextureTarget.Texture2D, 0)
-        For Each d As entity In world.entites
-            d.update()
-            d.draw()
+        For i As Integer = 0 To entites.Count - 1
+            Try
+                entites(i).draw()
+                entites(i).update()
+            Catch e As Exception
+
+            End Try
         Next
+        'Next
+    End Sub
+
+    Public Shared Sub addEntity(e As entity)
+        birthingEntites.Add(e)
+    End Sub
+
+    Public Shared Sub removeEntity(e As entity)
+        dyingEntites.Add(e)
     End Sub
 
     ' find the clostest entity to a position
@@ -121,9 +138,15 @@ Public Class world
                         End If
                         If line.StartsWith("birthChance:") Then
                             birth = Double.Parse(spaces(0))
+                            If birth = 0 Then ' helps prevent an issue with 0 birth?
+                                birth += 0.1
+                            End If
                         End If
                         If line.StartsWith("deathChance:") Then
                             death = Double.Parse(spaces(0))
+                            If death = 0 Then ' helps prevent an issue with 0 death
+                                death += 0.1
+                            End If
                         End If
                     End If
                     ' ends the current entity then spawns in the world
@@ -278,6 +301,10 @@ Public Class world
             musics.Add(file)
             Console.WriteLine("Music found: " & System.IO.Path.GetFileName(file))
         Next
+        'prevents loading no music
+        If musics.Count = 0 Then
+            Return
+        End If
         Dim thread As Thread = New Thread(AddressOf playMusic)
         thread.IsBackground = True
         thread.Start()

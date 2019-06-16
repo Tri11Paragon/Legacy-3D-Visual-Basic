@@ -9,32 +9,82 @@ traitTexture:2
 traitType: birth
 )
 {
-position: 5.62449073791504 4.73324393963401 5.62449073791504
+position: 271.458449655911 0.310357979482424 -70.7161478609778
 rotation: 0
-velocity: 0 16.951710805163 0
-acceleration: 0 -56.01 0
+velocity: 0 9.67692045962904 0
+acceleration: 0 100.95 0
 texture: 2
 mesh: pig.obj
-birthChance: 15
-deathChance: 10
+birthChance: 16.2224269270897
+deathChance: 10.3581632733345
 }
 {
-position: 0.975999057292938 4.73324393963401 0.975999057292938
+position: 371.468454406131 0.263549155035825 29.2938568892423
 rotation: 0
-velocity: 0 16.951710805163 0
-acceleration: 0 -56.01 0
-texture: 1
+velocity: 0 5.10288024237379 0
+acceleration: 0 16.14 0
+texture: 3
 mesh: pig.obj
-birthChance: 15
-deathChance: 10
+birthChance: 16.8217679858208
+deathChance: 11.095394551754
 }
 {
-position: 0.975999057292938 1434879093297.06 0.975999057292938
+position: 171.408444903791 4.7868825347294 -170.766152613098
 rotation: 0
-velocity: 0 5302306512.12573 0
-acceleration: 0 9711052.7774155 0
-texture: 1
+velocity: 0 -28.9125913732744 0
+acceleration: 0 -242.4 0
+texture: 2
 mesh: pig.obj
-birthChance: 15
-deathChance: 10
+birthChance: 16.37752648592
+deathChance: 11.4615276932716
+}
+{
+position: 371.578454411356 0 29.403856894467
+rotation: 0
+velocity: 0 0 0
+acceleration: 0 0 0
+texture: 3
+mesh: pig.obj
+birthChance: 17.7520726919174
+deathChance: 11.8624461174011
+}
+{
+position: 218.278447129996 0.450761562820047 -123.896150386892
+rotation: 0
+velocity: -10 -12.6801606022753 -10
+acceleration: 0 -150.63 0
+texture: 3
+mesh: pig.obj
+birthChance: 16.8907171726227
+deathChance: 11.1440866470337
+}
+{
+position: 271.458449655911 0.74358016063632 -70.7161478609778
+rotation: 0
+velocity: 0 -8.17677038837574 0
+acceleration: 0 -131.01 0
+texture: 3
+mesh: pig.obj
+birthChance: 19.4988814711571
+deathChance: 12.7324777007103
+}
+{
+position: 271.458449655911 0 -70.7161478609778
+rotation: 0
+velocity: 0 0 0
+acceleration: 0 0 0
+texture: 3
+mesh: pig.obj
+birthChance: 19.4957083218324
+deathChance: 13.7378894611484
+}
+{
+position: 171.408444903791 0.983259543404638 -170.766152613098
+rotation: 0
+velocity: 0 0.372090017673325 0
+acceleration: 0 -81.96 0
+texture: 2
+mesh: pig.obj
+birthChance: 17.6659709334374
+deathChance: 12.239312517643
 }

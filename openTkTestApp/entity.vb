@@ -8,14 +8,14 @@ Imports OpenTK.Input
 
 Public Class entity
 
-    Private x As Double
-    Private y As Double
-    Private z As Double
-    Private rotation As Double ' rotation
-    Private texture As Integer
-    Private velocity As Vector3d
+    Private x As Double = 0
+    Private y As Double = 0
+    Private z As Double = 0
+    Private rotation As Double = 0 ' rotation
+    Private texture As Integer = 0
+    Private velocity As New Vector3d(0, 0, 0)
     Private mesh As Mesh
-    Private acceleration As Vector3d
+    Private acceleration As New Vector3d(0, 0, 0)
     Private isOnGround As Boolean = False
     Private friction As Double = 5.23D
     Public deathChance As Double = 10 ' im not going to use getters and setters for this stuff. its pointless as there will be no math with it
@@ -76,28 +76,109 @@ Public Class entity
             isOnGround = False
         End If
         If isOnGround Then
-            bounce()
+            If ((101) * Rnd() <= 10) Then
+                bounce()
+            End If
         End If
-        ' this runs once per entity interval which is defined inside the settings file.
-        If CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) - start >= settings.entityInterval Then
+            ' this runs once per entity interval which is defined inside the settings file.
+            If CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) - start >= settings.entityInterval Then
             start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64) ' reset stuff
             ' do death and birth checks.
-            death()
+            doAI()
             birth()
+            death()
         End If
+
     End Sub
 
+    ' BOING
     Public Sub bounce()
         acceleration.Y += 75
     End Sub
 
-    Public Sub birth()
-        'world.findClosestEntity(x, y, z)
-        Console.WriteLine("birth!")
+
+    Public Sub doAI()
+        ' reset the velocity because entity is now done moving
+        If velocity.X <> 0 Then
+            velocity.X = 0
+        End If
+        If velocity.Z <> 0 Then
+            velocity.Z = 0
+        End If
+        ' 50% chance each interval to move
+        If isOnGround And ((100) * Rnd() <= 50) Then
+            ' just how much to move
+            Dim dist As Double = (10 - 1 + 1) * Rnd() + 1
+            ' adds some movement in a random directon
+            ' 50% chance to be forward or backwards
+            If ((100) * Rnd() <= 50) Then
+                velocity.Z += dist
+            Else
+                velocity.Z -= dist
+            End If
+            If ((100) * Rnd() <= 50) Then
+                velocity.X += dist
+            Else
+                velocity.X -= dist
+            End If
+        End If
     End Sub
 
-    Public Sub death()
+    ' birth stuff
+    Public Sub birth()
+        'prevents running if the entity is unable to birth
+        If Me.birthChance <= 0 Then
+            Return
+        End If
+        ' this next 2 lines just gets the death values from the world loader
+        Dim valFromBirth As Double = 0
+        world.deathChances.TryGetValue(Me.texture, valFromBirth)
+        ' generates a random number between 0 and 100. 
+        ' if the chance is 50, that means there should be a 50% chance of this being executed
+        If ((101) * Rnd() <= (Me.birthChance + valFromBirth)) Then
+            ' finds closest entity to birth with
+            Dim ent = world.findClosestEntity(x, y, z)
+            'prevents running if breeding entity is unable to birth
+            If ent.birthChance <= 0 Or ent.deathChance <= 0 Then
+                Console.WriteLine("Unable to birth! Birth chance: " & ent.birthChance & " Death Chance: " & ent.deathChance)
+                Return
+            End If
+            Dim t As Integer = (Math.Max(ent.texture, texture) - Math.Min(ent.texture, texture) + 1) * Rnd() + Math.Min(ent.texture, texture) ' select random texture between the parents
+            Dim m = {ent.mesh, Me.mesh}((2) * Rnd()) ' select mesh between the 2 parents
+            Dim bc = ((Math.Max(Me.birthChance, ent.birthChance) - Math.Min(Me.birthChance, ent.birthChance) + 1) * Rnd() + Math.Min(Me.birthChance, ent.birthChance)) ' pick random between the 2 entties for birthchance
+            bc += (0.1 - (-0.1) + 1) * Rnd() + (-0.1) ' this adds some randomness to the traits
+            Dim dc = ((Math.Max(Me.deathChance, ent.deathChance) - Math.Min(Me.deathChance, ent.deathChance) + 1) * Rnd() + Math.Min(Me.deathChance, ent.deathChance)) ' pick random death chance
+            dc += (0.1 - (-0.1) + 1) * Rnd() + (-0.1) ' this adds some randomness to the traits
 
+            'setup the new child with ^ traits
+            Dim child As New entity(m, t, Me.x, Me.y, Me.z)
+            child.setRotation(0)
+            ' set birth chance
+            child.birthChance = bc
+            child.deathChance = dc
+
+            'add to world
+            world.entites.Add(child)
+            Console.WriteLine("Made a child! There are now " & world.entites.Count() & " in the world!")
+
+            'Throw New Exception("Test!")
+        End If
+    End Sub
+
+    ' death stuff
+    Public Sub death()
+        'prevents running code if the entity is not able to die.
+        If Me.deathChance <= 0 Then
+            Return
+        End If
+        ' this next 2 lines just gets the death values from the world loader
+        Dim valFromDeath As Double = 0
+        world.deathChances.TryGetValue(Me.texture, valFromDeath)
+        ' generates a random number between 0 and 100. 
+        ' if the chance is 50, that means there should be a 50% chance of this being executed
+        If ((101) * Rnd() <= (Me.deathChance + valFromDeath)) Then
+            world.entites.Remove(Me) ' i like how its just "remove(me)" kek
+        End If
     End Sub
 
     Public Sub draw()
@@ -112,6 +193,7 @@ Public Class entity
     '
     ' THE FOLLOW SUBS ARE JUST GETTERS / SETERS
     ' They get information / set information about the entity
+    ' they explain themselves
 
     Public Sub accelerate(vel As Vector3d)
         velocity += vel

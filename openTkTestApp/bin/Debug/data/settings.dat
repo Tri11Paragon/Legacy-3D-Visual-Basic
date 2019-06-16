@@ -3,5 +3,6 @@ flipRotate:1
 scale:1 1 1
 speed:0.4
 sensitivity:0.75
-cameraPosition:-20.6737603825167 -3.3 -8.58214990504559
-cameraRotation:-0.900000000000055 -79.5
+cameraPosition:-325.697560467698 -22.0999999999999 64.9484307669752
+cameraRotation:-17.55 -201
+entityInterval:10000
