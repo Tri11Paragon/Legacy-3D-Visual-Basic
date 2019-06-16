@@ -6,7 +6,10 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
-
+' Brett Terpstra
+' 2019-06-16
+' final project
+' settings loader class
 Public Class settings
 
     Public Shared useSkybox As Boolean = True ' use skybox
@@ -18,6 +21,7 @@ Public Class settings
 
     ' loads settings from file
     Public Shared Sub loadSettings()
+        ' load the file
         Dim FS As New FileStream("data/settings.dat", FileMode.Open, FileAccess.Read)
         Dim cf As New StreamReader(FS)
 
@@ -25,12 +29,18 @@ Public Class settings
         Do While cf.Peek <> -1
             Dim line As String = o_helper.fn_1293(cf.ReadLine())
             If Not line.Equals("%") Then ' remove comments
+                ' splits at the :
                 Dim s = line.Split(":")
+                ' splits the line at the spaces
                 Dim spaces As List(Of String) = New List(Of String)(s(1).Split(" "))
+                'removes empty space
                 If String.IsNullOrWhiteSpace(spaces(0)) Or String.IsNullOrEmpty(spaces(0)) Then
                     spaces.RemoveAt(0)
                 End If
-                If s(0).StartsWith("useSkybox") Then ' following stuff just loads settings
+                ' following stuff just loads settings ( the string explains what is loading)
+                ' i hope y'all can understand the not wanted to doccument this. Its kindof useless
+                If s(0).StartsWith("useSkybox") Then
+                    ' sets the skybox var based on the first number found
                     useSkybox = Boolean.Parse(spaces(0))
                 End If
                 If s(0).StartsWith("flipRotate") Then
@@ -62,16 +72,19 @@ Public Class settings
             End If
         Loop
 
+        ' closes buffer
         cf.Close()
         FS.Close()
     End Sub
 
     ' saves the settings
     Public Shared Sub saveSettings()
+        ' saves the settings file
         Dim FS As New FileStream("data/settings.dat", FileMode.Create, FileAccess.ReadWrite)
         Dim cf As New StreamWriter(FS)
 
         'adds to file
+        ' this saves settings using the proper format
         cf.WriteLine("useSkybox:" & useSkybox)
         cf.WriteLine("flipRotate:" & flipRotate)
         cf.WriteLine("scale:" & scale(0) & " " & scale(1) & " " & scale(2))
@@ -81,6 +94,7 @@ Public Class settings
         cf.WriteLine("cameraRotation:" & Module1.GLTexturedCube.pitch & " " & -Module1.GLTexturedCube.yaw)
         cf.WriteLine("entityInterval:" & entityInterval)
 
+        ' closes the buffer
         cf.Close()
         FS.Close()
     End Sub

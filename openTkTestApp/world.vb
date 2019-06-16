@@ -8,33 +8,45 @@ Imports OpenTK.Input
 Imports System.Media
 Imports System.Threading
 
+' Brett Terpstra
+' 2019-06-16
+' final project
+' world class that loads entites and the music for the game
+' is the biggest in the game
 Public Class world
 
-    Public Shared entites As List(Of entity) = New List(Of entity)
-    Public Shared textures(500) As Integer
+    Public Shared entites As List(Of entity) = New List(Of entity) ' list of all the entities in the world
+    Public Shared textures(500) As Integer ' array of all possible textures
+    ' these contain loaded instances of the death/birth chances
     Public Shared deathChances As Dictionary(Of Integer, Double) = New Dictionary(Of Integer, Double)
     Public Shared birthChances As Dictionary(Of Integer, Double) = New Dictionary(Of Integer, Double)
 
-    ' this is used to prevent crashes
+    ' this is used to prevent crashes ( NOT CURRENTLY USED )
     Private Shared dyingEntites As New List(Of entity)
     Private Shared birthingEntites As New List(Of entity)
 
-    Shared soundPlayer As SoundPlayer
-    Public Shared musics As List(Of String) = New List(Of String)
+    Shared soundPlayer As SoundPlayer ' the sound player
+    Public Shared musics As List(Of String) = New List(Of String) ' list of paths to the musics in the musics folder
 
+    ' create all things needed for the world
     Public Shared Sub create()
-        Randomize()
-        loadEntites()
-        loadMusic()
+        Randomize() ' RANDOMNESS
+        loadEntites() ' load entities from a file
+        loadMusic() ' load music from a file
     End Sub
 
+    ' updates stuff
     Public Shared Sub update()
+        ' draw the terrain
         GL.BindTexture(TextureTarget.Texture2D, textures(499))
         artist.drawMesh(polys.terrainMesh)
         GL.BindTexture(TextureTarget.Texture2D, 0)
+        ' loop through the entties, then draw and update the entites
         For i As Integer = 0 To entites.Count - 1
             Try
+                ' draw
                 entites(i).draw()
+                ' update
                 entites(i).update()
             Catch e As Exception
 
@@ -43,6 +55,7 @@ Public Class world
         'Next
     End Sub
 
+    ' THESE ARE NOT USED
     Public Shared Sub addEntity(e As entity)
         birthingEntites.Add(e)
     End Sub
@@ -67,11 +80,13 @@ Public Class world
         Return ent
     End Function
 
+    ' reload the entties with shift + alt + c
     Public Shared Sub reload()
         entites = New List(Of entity)
         loadEntites()
     End Sub
 
+    ' loads entites from the world file
     Public Shared Sub loadEntites()
         Try ' catches erros
             ' loads the file into memory
@@ -82,7 +97,8 @@ Public Class world
             Dim enityStarted As Boolean = False
             Dim traitStarted As Boolean = False
 
-            Dim ents As Dictionary(Of String, Mesh) = New Dictionary(Of String, Mesh)
+            ' these are just pre-defined to allow for creation of entites. They explain themselves
+            Dim entsMeshs As Dictionary(Of String, Mesh) = New Dictionary(Of String, Mesh)
             Dim pos As New Vector3(0, 0, 0)
             Dim rotation As Double = 0
             Dim velocity As New Vector3d(0, 0, 0)
@@ -92,20 +108,24 @@ Public Class world
             Dim birth As Double = 15
             Dim death As Double = 10
 
+            ' this is for traits . they explain themselves
             Dim traitChance As Double = 0
             Dim traitTexture As Integer = 0
             Dim traitType As Boolean = False
 
             'read the file
             Do While cf.Peek <> -1
+                ' reads the line and then filters out comments / unwanted stuff (comments don't get resaved so they are useless but i have this here just in case)
                 Dim line As String = o_helper.fn_1293(cf.ReadLine())
                 If Not line.Equals("%") Then ' remove comments
-                    If line.StartsWith("{") And enityStarted Then
+                    If line.StartsWith("{") And enityStarted Then ' checks to make sure that the user did not make an error. Tells the user
                         Console.WriteLine("Error loading trait! INVALID FORMAT!")
                     End If
+                    ' checks if we are starting entity, then tell interpreter that we have started entity
                     If line.StartsWith("{") And Not enityStarted Then
                         enityStarted = True
                     End If
+                    ' do all the entity loading stuff
                     If enityStarted And Not line.StartsWith("{") And Not line.StartsWith("}") Then
                         ' splits to setup format for the interpreter below
                         Dim tmp = line.Split(":")
@@ -156,14 +176,16 @@ Public Class world
                         If String.IsNullOrEmpty(mesh) Then
                             Throw New Exception("MESH NAME NOT FOUND!")
                         End If
+                        ' mesh to be loaded / got from the dictonary
                         Dim m As Mesh
 
                         ' try to load up the entity model
-                        If Not ents.TryGetValue(mesh, m) Then
+                        If Not entsMeshs.TryGetValue(mesh, m) Then
                             m = polys.BLoad("primitives/" & mesh)
-                            ents.Add(mesh, m)
+                            entsMeshs.Add(mesh, m)
                         End If
 
+                        ' create a new entity instance
                         Dim entity As New entity(m, texture, pos.X, pos.Y, pos.Z)
                         ' apply all loaded variables
                         entity.setRotation(rotation)
@@ -186,9 +208,11 @@ Public Class world
                         death = 10
                         birth = 15
                     End If
+                    'checks if invalid format
                     If line.StartsWith("(") And traitStarted Then
                         Console.WriteLine("Error loading trait! INVALID FORMAT!")
                     End If
+                    ' start the trait loading.
                     If line.StartsWith("(") And Not traitStarted Then
                         traitStarted = True
                     End If
@@ -234,6 +258,7 @@ Public Class world
                 End If
             Loop
 
+            ' close the file stream
             cf.Close()
             FS.Close()
         Catch e As FileNotFoundException
@@ -243,11 +268,13 @@ Public Class world
     End Sub
 
     Public Shared Sub saveEntities()
+        ' load the file into a save buffer
         Dim FS As New FileStream("data/world.dat", FileMode.Create, FileAccess.ReadWrite)
         Dim cf As New StreamWriter(FS)
 
         ' saves death chances to a file
         For Each k In deathChances
+            ' writes all the death chances (in proper format)
             cf.WriteLine("(")
             cf.WriteLine("traitChance:" & k.Value)
             cf.WriteLine("traitTexture:" & k.Key)
@@ -256,6 +283,7 @@ Public Class world
         Next
         ' saves birth chances to the world file
         For Each k In birthChances
+            ' writes all the birth chances (in the proper format)
             cf.WriteLine("(")
             cf.WriteLine("traitChance:" & k.Value)
             cf.WriteLine("traitTexture:" & k.Key)
@@ -265,6 +293,7 @@ Public Class world
 
         'saves enttites to file
         For Each e As entity In entites
+            ' saves the entity data with proper format
             cf.WriteLine("{") ' these explain themselves
             cf.WriteLine("position: " & e.getX() & " " & e.getY() & " " & e.getZ())
             cf.WriteLine("rotation: " & e.getRotation())
@@ -277,12 +306,13 @@ Public Class world
             cf.WriteLine("}")
         Next
 
+        ' close the save buffer
         cf.Close()
         FS.Close()
     End Sub
 
     'loops through the array of vertices and checks to see if any vertex is closest and that must be the height
-    ' (does not work)
+    ' (does not work) / IS NOT USED (IGNORE THIS)
     Public Shared Function getHeight(x As Double, z As Double) As Double
         Dim h As Double = 0
         For Each v In polys.terrainMesh.vertices

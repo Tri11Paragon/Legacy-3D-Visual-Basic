@@ -6,30 +6,37 @@ Imports System.Drawing.Imaging
 Imports System.IO
 Imports OpenTK.Input
 
+' Brett Terpstra
+' 2019-06-16
+' final project
+' entity class. does jump things n stuff
 Public Class entity
 
+    ' poistion
     Private x As Double = 0
     Private y As Double = 0
     Private z As Double = 0
     Private rotation As Double = 0 ' rotation
-    Private texture As Integer = 0
-    Private velocity As New Vector3d(0, 0, 0)
-    Private mesh As Mesh
-    Private acceleration As New Vector3d(0, 0, 0)
-    Private isOnGround As Boolean = False
-    Private friction As Double = 5.23D
+    Private texture As Integer = 0 ' texture number
+    Private velocity As New Vector3d(0, 0, 0) ' velocity
+    Private mesh As Mesh ' mesh of the entity
+    Private acceleration As New Vector3d(0, 0, 0) ' acceleration
+    Private isOnGround As Boolean = False ' is the entity on ground?
+    Private friction As Double = 5.23D ' not used varaible
     Public deathChance As Double = 10 ' im not going to use getters and setters for this stuff. its pointless as there will be no math with it
     Public birthChance As Double = 15 ' im also the only developer so like i don't really need access rules
 
-    ' start time
+    ' start time (time since last entity interval)
     Dim start As Long = 0
 
+    ' this is the constructor
     Public Sub New(ByRef mesh As Mesh, ByRef texture As Integer, x As Double, y As Double, z As Double)
         Me.x = x
         Me.y = y
         Me.z = z
         Me.texture = texture
         Me.mesh = mesh
+        ' tell the game what time it is when starting
         start = CType((DateTime.Now - New DateTime(1970, 1, 1)).TotalMilliseconds, Int64)
     End Sub
 
@@ -63,13 +70,14 @@ Public Class entity
         Else
             acceleration.Y += -9.81
         End If
+        ' if we are below 0 then we are coliding with the world
         If y <= 0.0 Then
-            isOnGround = True
-            y = 0.0
-            If velocity.Y <= 0 Then
+            isOnGround = True ' tell the game we are on the ground 
+            y = 0.0 ' make sure we don't keep going down
+            If velocity.Y <= 0 Then ' prevents moving more then we need to just to get reset
                 velocity.Y = 0
             End If
-            If acceleration.Y <= 0 Then
+            If acceleration.Y <= 0 Then ' same as ^ but removes even more math that needs to be done
                 acceleration.Y = 0
             End If
         Else
@@ -109,6 +117,7 @@ Public Class entity
         If isOnGround And ((100) * Rnd() <= 50) Then
             ' just how much to move
             Dim dist As Double = (10 - 1 + 1) * Rnd() + 1
+
             ' adds some movement in a random directon
             ' 50% chance to be forward or backwards
             If ((100) * Rnd() <= 50) Then
@@ -116,11 +125,18 @@ Public Class entity
             Else
                 velocity.Z -= dist
             End If
+            ' this handles x direction
             If ((100) * Rnd() <= 50) Then
                 velocity.X += dist
             Else
                 velocity.X -= dist
             End If
+        End If
+        ' adds some random rotaiton (rotation does not change movement)
+        rotation += (10 - (-10) + 1) * Rnd() - 10
+        'reset rotation if we give >360 (prevents large numbers)
+        If rotation >= 360 Then
+            rotation = 0
         End If
     End Sub
 

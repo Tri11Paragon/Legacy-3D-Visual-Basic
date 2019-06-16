@@ -7,6 +7,10 @@ Imports System.IO
 Imports System.IO.Path
 Imports OpenTK.Input
 
+' Brett Terpstra
+' 2019-06-16
+' final project
+' object loader classes
 Public Class polys
 
     Public Shared terrainMesh As Mesh
@@ -36,6 +40,7 @@ Public Class polys
     ' i made this one. ( i copied ^ and modified it)
     ' to hopefully work
     Public Shared Function BLoad(ByVal path As String) As Mesh
+        ' creates arrays for useful datas (lists of verts)
         Dim verts As List(Of Vector3) = New List(Of Vector3)
         Dim vertices As List(Of Vector3) = New List(Of Vector3)()
         Dim texts As List(Of Vector2) = New List(Of Vector2)
@@ -44,38 +49,51 @@ Public Class polys
         Dim normals As List(Of Vector3) = New List(Of Vector3)()
         Dim name As String = ""
 
+        ' checks to make sure that the file exists
         If Not File.Exists(path) Then
             Throw New FileNotFoundException("Unable to open " & path & ", does not exist.")
         End If
 
+        ' get the name of the object ( for entity name later)
         name = System.IO.Path.GetFileName(path)
 
         Try
+            ' loads file as a stream reader
             Using streamReader As StreamReader = New StreamReader(path)
-                While Not streamReader.EndOfStream
+                While Not streamReader.EndOfStream ' reads to the end
+                    ' creates a list of words containing our verticies (verts)
                     Dim words As List(Of String) = New List(Of String)(streamReader.ReadLine().ToLower().Split(" "))
+                    ' rmeove the empty strings
                     words.RemoveAll(Function(s) s = String.Empty)
+                    ' don't do the following code if the word count is 0
                     If words.Count = 0 Then Continue While
+                    ' get the type of vert we are dealing with
                     Dim type As String = words(0)
+                    ' remove the type from words are we don't need it
                     words.RemoveAt(0)
 
                     'Console.WriteLine(words.Count)
 
+                    ' select the type var
                     Select Case type
-                        Case "v"
+                        Case "v" ' vertex
                             verts.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
-                        Case "vt"
+                        Case "vt" ' texture
                             texts.Add(New Vector2(Single.Parse(words(0)), Single.Parse(words(1))))
-                        Case "vn"
+                        Case "vn" ' normals
                             norms.Add(New Vector3(Single.Parse(words(0)), Single.Parse(words(1)), Single.Parse(words(2))))
-                        Case "f"
-
+                        Case "f" ' face indicies
+                            ' reads the indices in the words
                             For Each w As String In words
                                 'Console.WriteLine(w)
                                 If w.Length = 0 Then Continue For
+                                ' splits the word at the / (this is due to the OBJ file format rules)
                                 Dim comps As String() = w.Split("/")
+                                ' adds the vertices to the vertex list using the indice as a pointer
                                 vertices.Add(verts(UInteger.Parse(comps(0)) - 1))
+                                ' adds the texture vertices to the texture list using the texture indice as a pointer
                                 If comps.Length > 1 AndAlso comps(1).Length <> 0 Then textureVertices.Add(texts(UInteger.Parse(comps(1)) - 1))
+                                ' not used and won't work. (don't have lighting added yet)
                                 If comps.Length > 2 Then normals.Add(norms(UInteger.Parse(comps(2)) - 1))
                             Next
 
@@ -86,10 +104,12 @@ Public Class polys
         Catch e As Exception
 
         End Try
+        ' retuns the mesh using the list
         Return New Mesh(name, vertices, textureVertices, normals)
     End Function
 
-    ' useless function
+    ' useless function (DO NOT USE. im only keeping it for the histroy)
+    ' i hope it is understandable that i do not doccument this. 
     Public Shared Function loadFromFile(primitiveName As String) As List(Of touple(Of Vector3, Vector2))
         Dim lst As List(Of touple(Of Vector3, Vector2)) = New List(Of touple(Of Vector3, Vector2))
 
@@ -130,6 +150,7 @@ Public Class polys
 
 End Class
 
+' mesh class i copied from ^ and modified a bit to work with indices non-verticies
 Public Class Mesh
     Public ReadOnly vertices As List(Of Vector3)
     Public ReadOnly textureVertices As List(Of Vector2)
