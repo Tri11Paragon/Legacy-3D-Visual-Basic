@@ -47,9 +47,6 @@ The game has many user controls that allow you to change settings at runtime wit
 ## **World**<br/>
 The world is loaded from the world.dat file. Entities and traits have a predefined format that needs to be followed. If this format is not followed, it is not my fault if the game: crashes, has unexpected issues or is buggy. Any word starting with $ means that the user is expected to enter a value into here<br/>
 <br/>
-<br/>
-<br/>
-<br/>
 ### **Traits**<br/>
 Traits are defined usually at the start of the world. They follow a very simple format. All of there are required:<br/>
  The start of a trait is always “(“ this defines that you wish to create a new trait.
