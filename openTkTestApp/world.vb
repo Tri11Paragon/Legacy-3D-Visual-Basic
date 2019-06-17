@@ -109,8 +109,8 @@ Public Class world
             Dim death As Double = 10
 
             ' this is for traits . they explain themselves
-            Dim traitChance As Double = 0
-            Dim traitTexture As Integer = 0
+            Dim traitChance As Double = 0.1
+            Dim traitTexture As Integer = 1
             Dim traitType As Boolean = False
 
             'read the file

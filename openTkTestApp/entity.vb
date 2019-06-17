@@ -132,12 +132,15 @@ Public Class entity
                 velocity.X -= dist
             End If
         End If
+        ' THIS IS DISABLED DUE TO A BUG THAT WAS FOUND AT LAST MINUTE.
+        ' I DON'T KNOW IF THIS IS THE CAUSE OF IT OR IF IT WAS ACUTALLY A BUG
+        ' not like this changes anything in the game.
         ' adds some random rotaiton (rotation does not change movement)
-        rotation += (10 - (-10) + 1) * Rnd() - 10
+        'rotation += (10 - (-10) + 1) * Rnd() - 10
         'reset rotation if we give >360 (prevents large numbers)
-        If rotation >= 360 Then
-            rotation = 0
-        End If
+        'If rotation >= 360 Then
+        '    rotation = 0
+        'End If
     End Sub
 
     ' birth stuff
@@ -200,9 +203,16 @@ Public Class entity
     Public Sub draw()
         'Dim d As Vector3 = maths.distance(-camera.x, camera.y, -camera.z, Me.x, Me.y, Me.z)
         'If (d.X < 40 And d.Z < 40) And d.Y < 40 Then
-        GL.Rotate(rotation, 0, 1, 0)
+
+        ' THIS IS DISABLED DUE TO A BUG THAT WAS FOUND AT LAST MINUTE.
+        ' I DON'T KNOW IF THIS IS THE CAUSE OF IT OR IF IT WAS ACUTALLY A BUG
+        ' not like this changes anything in the game.
+        ' (the rotation is disabled)
+
+        'GL.Rotate(rotation, 0, 1, 0)
         artist.drawMesh(mesh, texture, x, y, z)
-        GL.Rotate(rotation, 0, -1, 0)
+        'GL.Rotate(rotation, 0, -1, 0)
+
         'End If
     End Sub
 
