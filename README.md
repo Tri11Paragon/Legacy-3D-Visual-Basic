@@ -2,22 +2,22 @@
 The application, RMS, which named after Richard Matthew Stallman, who is the creator of the free software foundation, allows for a user to define entities and traits inside a world file and then watch them interact inside a virtual environment where they hop around, breed and die. It is recommended that the user has at least 1gb of ram and a dual core computer. Windows 7 will result in the best performance, as there is an issue with windows 10 (see bugs section).  Im writing this both for you kedwell and for the github readme file. DO NOT WORRY IF IT TAKES A MINUTE TO LOAD. There are a lot of assets in the game that need to be loaded from file. (Sorry if im missing information in this readme. If information is missing please make an issue report on the github ( https://github.com/Tri11Paragon/Legacy-3D-Visual-Basic/issues/new), I will update the github will bugfixes and docfixes)
 
 # Bugs
-There are a couple of bugs within the game that are known and are out of my control.
-	1. There is an issue with stuttering in windows 10. This must have something to the way windows 10 handles its windows, and the way OpenTk handles windows 10. Please use a computer with windows 7. I don’t know if regular windows 7 works, but I know the school computers windows 7 works very well. The only solution to the windows 10 bug that I have found is to alt tab a couple of times and it can fix the issue.
-2. On windows 10 the camera look movement is inverted and I have no idea why. This again seems to be a problem with OpenTk not having a mouse lock. The solution is to use the key command Alt + Shift + F (see below) to invert the camera controls or by editing the settings.dat file found in the data folder, to contain a “flipRotate:-1”.
+There are a couple of bugs within the game that are known and are out of my control.<br/>
+	1. There is an issue with stuttering in windows 10. This must have something to the way windows 10 handles its windows, and the way OpenTk handles windows 10. Please use a computer with windows 7. I don’t know if regular windows 7 works, but I know the school computers windows 7 works very well. The only solution to the windows 10 bug that I have found is to alt tab a couple of times and it can fix the issue.<br/>
+	2. On windows 10 the camera look movement is inverted and I have no idea why. This again seems to be a problem with OpenTk not having a mouse lock. The solution is to use the key command Alt + Shift + F (see below) to invert the camera controls or by editing the settings.dat file found in the data folder, to contain a “flipRotate:-1”.<br/>
 
-Please report any found bugs to the github issues page or by emailing me at brett.terpstra@lkdsb.com
-( https://github.com/Tri11Paragon/Legacy-3D-Visual-Basic/issues/new ). I am not responsible for ANY crashed caused by user error or by not following the proper format instructions inside this file. Please do not submit a bug report if the crash is caused by user error.
-
+Please report any found bugs to the github issues page or by emailing me at brett.terpstra@lkdsb.com<br/>
+( https://github.com/Tri11Paragon/Legacy-3D-Visual-Basic/issues/new ). I am not responsible for ANY crashed caused by user error or by not following the proper format instructions inside this file. Please do not submit a bug report if the crash is caused by user error.<br/>
+<br/>
 # Loading Custom Assets
-All the games assets are loaded at startup allowing for the user to load custom models, textures, and music. The music is loaded from the music folder and is played randomly at all times. There is always a song that that is playing. Songs must be in .wav format. Textures are loaded from the textures folder, and are assigned a number at startup. They are loaded in alphabetical order but if you want to be sure then you can check the console at startup. The game supports up to 498 textures in .png or .jpg format, other formats should work fine, but these are the only 2 types tested.  When creating a entity, this number MUST be used as it servers as a pointer to the texture. Unless a texture is added that changes the order of files, textures will always point to the same texture. 2 textures are required by default. The grass.png texture found in the textures folder, and cube.png found in the skybox folder.(folder inside textures) These come with the game. Loading models into the game is a lot easier. To load models into the game, place any .obj file into the primitives folder. Thats it! Now you can when defining an entity reference the .obj file by its name. (note the name must include .obj at the end.)
-
-
-
-
-
+All the games assets are loaded at startup allowing for the user to load custom models, textures, and music. The music is loaded from the music folder and is played randomly at all times. There is always a song that that is playing. Songs must be in .wav format. Textures are loaded from the textures folder, and are assigned a number at startup. They are loaded in alphabetical order but if you want to be sure then you can check the console at startup. The game supports up to 498 textures in .png or .jpg format, other formats should work fine, but these are the only 2 types tested.  When creating a entity, this number MUST be used as it servers as a pointer to the texture. Unless a texture is added that changes the order of files, textures will always point to the same texture. 2 textures are required by default. The grass.png texture found in the textures folder, and cube.png found in the skybox folder.(folder inside textures) These come with the game. Loading models into the game is a lot easier. To load models into the game, place any .obj file into the primitives folder. Thats it! Now you can when defining an entity reference the .obj file by its name. (note the name must include .obj at the end.)<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
 # Settings / World Control
-**Settings**
+**Settings**<br/>
 There are many settings that can be control inside this application. The settings file is pre-generated by the application at runtime and will be filled out when the game is closed. All user-controllable settings are inside this file. This is an example of the settings file. (The settings.dat and world.dat are case-sensitive)<br/>
 Everything within this file can be changed by the user.<br/>
 **useSkybox** explains itself, true and the skybox is enabled, false and the skybox is not.<br/>
@@ -28,50 +28,50 @@ Everything within this file can be changed by the user.<br/>
 **cameraPostion** is the camera’s position.<br/>
 **cameraRotation** is the camera’s rotation.<br/>
 **entityInterval** is how how long(in ms) it takes the entity to do its checks for birth, death, and movement. Default is 10 seconds.<br/>
+<br/>
+**Controls**<br/>
+The game has many user controls that allow you to change settings at runtime without editing the file. (settings cannot be reloaded at runtime). All changes made will be saved when the game closes<br/>
+<br/>
+**Alt + Shift + Plus** increases the speed movement of the camera by 0.1<br/>
+**Alt + Shift + Minus** decreases the speed movement of the camera by 0.1<br/>
+**Alt + S** saves the entities to the world file (useful when wanting to edit the file at runtime)<br/>
+**Alt + Shift + C** reloads the world file (without closing the application)<br/>
+**Alt + Shift + F** flips the mouse movement<br/>
+**F12** resets the camera position to 0, 0, 0<br/>
+**F2** takes a screenshot and saves to the screenshots folder.<br/>
+**W** moves the camera forward<br/>
+**S** moves the camera backwards<br/>
+**A** moves the camera left<br/>
+**D** moves the camera right<br/>
+**Left Shift** moves the camera down<br/>
+**Space** moves the camera up<br/>
+**Escape** frees the mouse movement<br/>
 
-**Controls**
-The game has many user controls that allow you to change settings at runtime without editing the file. (settings cannot be reloaded at runtime). All changes made will be saved when the game closes
-
-**Alt + Shift + Plus** increases the speed movement of the camera by 0.1
-**Alt + Shift + Minus** decreases the speed movement of the camera by 0.1
-**Alt + S** saves the entities to the world file (useful when wanting to edit the file at runtime)
-**Alt + Shift + C** reloads the world file (without closing the application)
-**Alt + Shift + F** flips the mouse movement
-**F12** resets the camera position to 0, 0, 0
-**F2** takes a screenshot and saves to the screenshots folder.
-**W** moves the camera forward
-**S** moves the camera backwards
-**A** moves the camera left
-**D** moves the camera right
-**Left Shift** moves the camera down
-**Space** moves the camera up
-**Escape** frees the mouse movement
-
-*World**
-The world is loaded from the world.dat file. Entities and traits have a predefined format that needs to be followed. If this format is not followed, it is not my fault if the game: crashes, has unexpected issues or is buggy. Any word starting with $ means that the user is expected to enter a value into here
-
-
-
-
-**Traits**
-Traits are defined usually at the start of the world. They follow a very simple format. Here is an example of the format. All of are required: 
+*World**<br/>
+The world is loaded from the world.dat file. Entities and traits have a predefined format that needs to be followed. If this format is not followed, it is not my fault if the game: crashes, has unexpected issues or is buggy. Any word starting with $ means that the user is expected to enter a value into here<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+**Traits**<br/>
+Traits are defined usually at the start of the world. They follow a very simple format. Here is an example of the format. All of there are required:<br/>
  The start of a trait is always “(“ this defines that you wish to create a new trait.
-The next can be any of the 3: (these can be in any order)
-		**traitChance:$Double** – This how much the trait effects the specific trait type, if its 1.5 and the trait type is death, and the trait texture is 1 then any entity with the texture id of 1 will have a 1.5% increase chance of death
-		**traitTexture:$Integer** – this is the texture that will be effected by the traitChance
-		**traitType:$type** – This is the type that will be effected. The 2 options are birth and death. (has to be these to and is case-sensitive)
-The end of a trait must be “)” which tells the application that you are done defining this trait. This is required before you start a next trait.
+The next can be any of the 3: (these can be in any order)<br/>
+		**traitChance:$Double** – This how much the trait effects the specific trait type, if its 1.5 and the trait type is death, and the trait texture is 1 then any entity with the texture id of 1 will have a 1.5% increase chance of death<br/>
+		**traitTexture:$Integer** – this is the texture that will be effected by the traitChance<br/>
+		**traitType:$type** – This is the type that will be effected. The 2 options are birth and death. (has to be these to and is case-sensitive)<br/>
+The end of a trait must be “)” which tells the application that you are done defining this trait. This is required before you start a next trait.<br/>
 
-**Entities**
-Entities are defined usually after the traits. They also follow a very simple format. Here is an example of this format:
-The only thing required here is the mesh, the application won’t crash if you miss any of these as they are predefined inside the code, but it is very recommended that you have all of these defined inside the entity.
-Entity format starts with a “{“ This is required. The following can be in any order:
-**position: $x $y $z** – this is the entity x,y,z position. The position is loaded as a double.
-**rotation: $r** – this is the entity rotation. It is also a double. (rotation is currently disabled)
-**velocity: $x $y $z** – This is the current x,y,z velocity of the entity. These are in double.
-**acceleration: $x $y $z** – this is the current x,y,z acceleration of the entity. These are also in double.
-**texture: $int** – this is the integer pointer to the texture. This can be found in the console of the game output at startup.
-**mesh: $name** – this is the name of the mesh that the entity will use. This needs to be its full name which includes the filename and extension. Eg pig.obj.
-**birthChance: $double** – This is the entity’s default birth chance, this will be passed onto its children with an added randomness. It is also a double.
-**beathChance: $double** – this is the entity’s default death chance, this will be passed onto the children with added randomness. It is a double.
-The final line of an entity definition must be “}”. This is required to end the definition of an entity. If you do not follow this, the game WILL get very made at you. 
+**Entities**<br/>
+Entities are defined usually after the traits. They also follow a very simple format. Here is an example of this format:<br/>
+The only thing required here is the mesh, the application won’t crash if you miss any of these as they are predefined inside the code, but it is very recommended that you have all of these defined inside the entity.<br/>
+Entity format starts with a “{“ This is required. The following can be in any order:<br/>
+**position: $x $y $z** – this is the entity x,y,z position. The position is loaded as a double.<br/>
+**rotation: $r** – this is the entity rotation. It is also a double. (rotation is currently disabled)<br/>
+**velocity: $x $y $z** – This is the current x,y,z velocity of the entity. These are in double.<br/>
+**acceleration: $x $y $z** – this is the current x,y,z acceleration of the entity. These are also in double.<br/>
+**texture: $int** – this is the integer pointer to the texture. This can be found in the console of the game output at startup.<br/>
+**mesh: $name** – this is the name of the mesh that the entity will use. This needs to be its full name which includes the filename and extension. Eg pig.obj.<br/>
+**birthChance: $double** – This is the entity’s default birth chance, this will be passed onto its children with an added randomness. It is also a double.<br/>
+**beathChance: $double** – this is the entity’s default death chance, this will be passed onto the children with added randomness. It is a double.<br/>
+The final line of an entity definition must be “}”. This is required to end the definition of an entity. If you do not follow this, the game WILL get very made at you. <br/>
