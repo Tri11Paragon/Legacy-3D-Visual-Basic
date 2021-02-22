@@ -6,7 +6,7 @@ There are a couple of bugs within the game that are known and are out of my cont
 	1. There is an issue with stuttering in windows 10. This must have something to the way windows 10 handles its windows, and the way OpenTk handles windows 10. Please use a computer with windows 7. I don’t know if regular windows 7 works, but I know the school computers windows 7 works very well. The only solution to the windows 10 bug that I have found is to alt tab a couple of times and it can fix the issue.<br/>
 	2. On windows 10 the camera look movement is inverted and I have no idea why. This again seems to be a problem with OpenTk not having a mouse lock. The solution is to use the key command Alt + Shift + F (see below) to invert the camera controls or by editing the settings.dat file found in the data folder, to contain a “flipRotate:-1”.<br/>
 
-Please report any found bugs to the github issues page or by emailing me at bt19ex@brocku.ca<br/>
+Please report any found bugs to the github issues page or by emailing me at tri11paragon@protonmail.com <br/>
 ( https://github.com/Tri11Paragon/Legacy-3D-Visual-Basic/issues/new ). I am not responsible for ANY crashed caused by user error or by not following the proper format instructions inside this file. Please do not submit a bug report if the crash is caused by user error.<br/>
 <br/>
 # Loading Custom Assets
